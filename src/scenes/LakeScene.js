@@ -9,92 +9,74 @@ export default class LakeScene extends SceneBase {
   create() {
     this._baseCreate('MAGIČNO JEZERO', 0x03080f);
 
-    // Player enters from left AT bridge level — no need to figure out height
+    // Player enters from left, at bridge level (y=120)
     this.player.sprite.setPosition(40, 120);
+    // Slim physics body (full texture is 42px tall — can't fit through any gap)
+    this.player.sprite.body.setSize(14, 20).setOffset(5, 12);
+    // Player renders above the lake (depth > 1)
+    this.player.sprite.setDepth(5);
 
-    // Lake — dark water body
-    const lake = this.add.graphics();
+    // Lake — drawn at depth 1 so player always appears on top
+    const lake = this.add.graphics().setDepth(1);
     lake.fillStyle(0x050a1a);
     lake.fillRect(80, 80, 320, 140);  // x=80-400, y=80-220
     lake.lineStyle(1, 0x0a1a3a);
     lake.strokeRect(80, 80, 320, 140);
 
-    // Reflection in water — hint for the invisible bridge path
-    const ref = this.add.graphics();
-    ref.fillStyle(0x2a4a6a, 0.9);
-    ref.fillRect(140, 105, 200, 6);
-    ref.fillStyle(0x3a5a7a, 0.6);
-    ref.fillRect(140, 100, 200, 4);
+    // Visible path on both shores (depth 3, above lake)
+    const shores = this.add.graphics().setDepth(3);
+    shores.fillStyle(0x5a4a2a);
+    shores.fillRect(0, 113, 80, 14);    // left shore
+    shores.fillRect(400, 113, 80, 14);  // right shore
 
-    // Visible shores connecting player to bridge
-    const shores = this.add.graphics();
-    shores.fillStyle(0x3a2a1a);
-    shores.fillRect(80, 116, 60, 8);   // left shore x=80-140, y=116-124
-    shores.fillRect(340, 116, 60, 8);  // right shore x=340-400, y=116-124
+    // Reflection strip — visual hint of bridge path
+    const ref = this.add.graphics().setDepth(2);
+    ref.fillStyle(0x2a4a6a, 0.7);
+    ref.fillRect(80, 113, 320, 14);
 
-    // WATER PHYSICS — solid lake body, gap only at bridge level (y=112-128)
+    // WATER PHYSICS
+    // Bridge corridor: y=110-130 (20px gap matches slimmed body height)
     this.waterGroup = this.physics.add.staticGroup();
-
-    // Top water: x=80-400, y=80-112
-    const wTop = this.waterGroup.create(240, 96, null);
-    wTop.setVisible(false).setSize(320, 32).refreshBody();
-
-    // Bottom water: x=80-400, y=128-220
-    const wBot = this.waterGroup.create(240, 174, null);
-    wBot.setVisible(false).setSize(320, 92).refreshBody();
-
+    const wTop = this.waterGroup.create(240, 95, null);
+    wTop.setVisible(false).setSize(320, 30).refreshBody();  // y=80-110
+    const wBot = this.waterGroup.create(240, 175, null);
+    wBot.setVisible(false).setSize(320, 90).refreshBody();  // y=130-220
     this.physics.add.collider(this.player.sprite, this.waterGroup);
 
-    // BARRIER WALLS — solid invisible walls above and below the entire lake
-    // Prevents player from walking around the lake vertically
+    // BARRIER WALLS — full-width, no vertical workaround possible
     this.barrierGroup = this.physics.add.staticGroup();
-
-    // Top barrier (full width, just above lake)
-    const bTop = this.barrierGroup.create(240, 73, null);
-    bTop.setVisible(false).setSize(480, 14).refreshBody();  // y=66-80
-
-    // Bottom barrier (full width, just below lake)
-    const bBot = this.barrierGroup.create(240, 227, null);
-    bBot.setVisible(false).setSize(480, 14).refreshBody();  // y=220-234
-
+    const bTop = this.barrierGroup.create(240, 72, null);
+    bTop.setVisible(false).setSize(480, 16).refreshBody();  // y=64-80
+    const bBot = this.barrierGroup.create(240, 228, null);
+    bBot.setVisible(false).setSize(480, 16).refreshBody();  // y=220-236
     this.physics.add.collider(this.player.sprite, this.barrierGroup);
 
-    // INVISIBLE BRIDGE — one staticGroup, tiles revealed by lantern
-    this.bridgeGroup = this.physics.add.staticGroup();
+    // BRIDGE TILES — appear in lantern light, depth 4 (above lake, below player)
     this.bridgeTiles = [];
-    for (let bx = 140; bx < 340; bx += 20) {
-      const tile = this.add.graphics();
-      tile.fillStyle(0x3a2a1a);
-      tile.fillRect(0, -4, 20, 8);
+    for (let bx = 80; bx < 400; bx += 20) {
+      const tile = this.add.graphics().setDepth(4);
+      tile.fillStyle(0x6a5a3a);
+      tile.fillRect(0, 0, 19, 14);
+      tile.fillStyle(0x4a3a1a);
+      tile.fillRect(0, 13, 19, 1);
       tile.x = bx;
-      tile.y = 120;
+      tile.y = 113;
       tile.setVisible(false);
-
-      const blocker = this.bridgeGroup.create(bx + 10, 120, null);
-      blocker.setVisible(false).setSize(20, 8).refreshBody();
       this.bridgeTiles.push({ tile, bx });
     }
-    this.physics.add.collider(this.player.sprite, this.bridgeGroup);
 
-    // Decorative trees (barriers are walls, trees are just atmosphere)
     this._createTrees([
       [30, 50],  [450, 50],
       [30, 260], [450, 260],
-      [30, 160], [450, 160],
-      // Trees framing the lake area (decorative)
-      [60, 50], [420, 50],
-      [60, 260], [420, 260],
+      [30, 165], [450, 165],
     ]);
 
-    // Mushrooms — accessible from bridge level
     this._createMushrooms([[50, 120], [440, 120]]);
 
-    // Ent on right shore (already awake)
     this.ent = new Ent(this, 420, 120);
     this.ent.wake();
 
-    // Rune ᚠ at end of bridge
-    this.rune = new Rune(this, 320, 120, 'ᚠ');
+    this.rune = new Rune(this, 300, 120, 'ᚠ');
     this.rune.label.setVisible(false);
 
     this.entSpoke = false;
