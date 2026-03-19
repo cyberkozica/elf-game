@@ -1,0 +1,13 @@
+{
+  "name": "elf-game",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "npx http-server . -p 8080 -o",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "jest": "^29.0.0"
+  }
+}
