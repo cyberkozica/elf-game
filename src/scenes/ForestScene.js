@@ -51,10 +51,20 @@ export default class ForestScene extends Phaser.Scene {
     const sourcePositions = [[100, 100], [300, 250]];
     sourcePositions.forEach(([x, y]) => {
       const g = this.add.graphics();
-      g.fillStyle(0x4aee4a, 0.9);
-      g.fillCircle(0, 0, 8);
-      g.fillStyle(0xaaffaa, 0.6);
-      g.fillCircle(0, 0, 4);
+      // Stabljika gljive
+      g.fillStyle(0xc8a870);
+      g.fillRect(-4, 2, 8, 7);
+      // Klobuk gljive (crvenkasto-smeđi polukrug)
+      g.fillStyle(0xaa4422);
+      g.fillCircle(0, 0, 9);
+      // Bijele točkice na klobuku
+      g.fillStyle(0xffffff);
+      g.fillRect(-5, -5, 3, 3);
+      g.fillRect(2, -7, 3, 3);
+      g.fillRect(-1, -2, 2, 2);
+      // Sjaj
+      g.fillStyle(0xff6644, 0.5);
+      g.fillCircle(0, -2, 5);
       g.x = x;
       g.y = y;
 
@@ -62,6 +72,20 @@ export default class ForestScene extends Phaser.Scene {
       this.physics.add.existing(zone, true);
       this.lightSources.push({ graphics: g, zone, x, y, used: false });
     });
+
+    // Ent blokira prolaz desno dok nije budan (spec: "Ent blokira prolaz prema jezeru")
+    this.entBlocker = this.physics.add.staticGroup();
+    const eb = this.entBlocker.create(380, 160, null);
+    eb.setVisible(false).setSize(40, 120).refreshBody();
+    this.physics.add.collider(this.player.sprite, this.entBlocker);
+
+    // Izlaz prema jezeru — desni rub ekrana
+    this.exitArrow = this.add.text(462, 155, '▶', {
+      fontSize: '14px', color: '#ffe066'
+    }).setOrigin(0.5).setDepth(15).setVisible(false);
+    this.exitLabel = this.add.text(445, 170, 'JEZERO', {
+      fontSize: '7px', color: '#8a7a1a', letterSpacing: 2
+    }).setOrigin(0.5).setDepth(15).setVisible(false);
   }
 
   _createTrees() {
@@ -140,5 +164,20 @@ export default class ForestScene extends Phaser.Scene {
         this.time.delayedCall(1500, () => this.dialog.hide());
       }
     });
+
+    // Ukloni blokator i pokaži izlaz kad je runa skupljena i Ent budan
+    if (this.rune.isCollected() && this.ent.isAwake()) {
+      // Ukloni fizički blokator (Ent više ne blokira put)
+      if (this.entBlocker.getLength() > 0) {
+        this.entBlocker.clear(true, true);
+      }
+      this.exitArrow.setVisible(true);
+      this.exitLabel.setVisible(true);
+
+      // Prijelaz kad vilenjak dođe do desnog ruba
+      if (this.player.x > 460) {
+        this.scene.start('Lake', { runes: this.collectedRunes });
+      }
+    }
   }
 }
