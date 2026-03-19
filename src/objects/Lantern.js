@@ -1,5 +1,5 @@
 // src/objects/Lantern.js
-import { LANTERN_DRAIN_RATE, LANTERN_REFILL_AMOUNT, LANTERN_MAX_RADIUS, LANTERN_MIN_RADIUS } from '../constants.js';
+import { LANTERN_DRAIN_RATE, LANTERN_REFILL_AMOUNT, LANTERN_MAX_RADIUS, LANTERN_MIN_RADIUS, GAME_WIDTH, GAME_HEIGHT } from '../constants.js';
 
 export class LanternState {
   constructor() {
@@ -25,7 +25,7 @@ export default class Lantern {
     this.scene = scene;
     this.player = player;
     this.state = new LanternState();
-    this.light = scene.add.graphics();
+    this.overlay = null;
   }
 
   update(delta) {
@@ -38,18 +38,19 @@ export default class Lantern {
   }
 
   _drawLight() {
+    if (!this.overlay) {
+      this.overlay = this.scene.add.graphics().setDepth(10);
+    }
     const radius = this.state.getRadius();
     const x = this.player.x;
     const y = this.player.y;
 
-    this.light.clear();
-    // Tamni overlay s rupom (svjetlost)
-    this.light.fillStyle(0x000000, 0.85);
-    this.light.fillRect(0, 0, 480, 320);
-
-    // Izreži krug (svjetlost) koristeći blendMode
-    this.light.fillStyle(0x000000, 0);
-    this.light.fillCircle(x, y, radius);
+    this.overlay.clear();
+    this.overlay.fillStyle(0x020805, 0.92);
+    this.overlay.fillRect(0, 0, GAME_WIDTH, y - radius);
+    this.overlay.fillRect(0, y + radius, GAME_WIDTH, GAME_HEIGHT - y - radius);
+    this.overlay.fillRect(0, y - radius, x - radius, radius * 2);
+    this.overlay.fillRect(x + radius, y - radius, GAME_WIDTH - x - radius, radius * 2);
   }
 
   getEnergy() {
