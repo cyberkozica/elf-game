@@ -45,6 +45,23 @@ export default class ForestScene extends Phaser.Scene {
 
     // Tipka E za interakciju
     this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+
+    // Svjetleće gljive — punjenje svjetiljke
+    this.lightSources = [];
+    const sourcePositions = [[100, 100], [300, 250]];
+    sourcePositions.forEach(([x, y]) => {
+      const g = this.add.graphics();
+      g.fillStyle(0x4aee4a, 0.9);
+      g.fillCircle(0, 0, 8);
+      g.fillStyle(0xaaffaa, 0.6);
+      g.fillCircle(0, 0, 4);
+      g.x = x;
+      g.y = y;
+
+      const zone = this.add.zone(x, y, 20, 20);
+      this.physics.add.existing(zone, true);
+      this.lightSources.push({ graphics: g, zone, x, y, used: false });
+    });
   }
 
   _createTrees() {
@@ -110,5 +127,18 @@ export default class ForestScene extends Phaser.Scene {
         this.time.delayedCall(2000, () => this.dialog.hide());
       }
     }
+
+    // Provjeri izvore svjetlosti
+    this.lightSources.forEach(src => {
+      if (src.used) return;
+      const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, src.x, src.y);
+      if (d < 20) {
+        this.lantern.refill();
+        src.used = true;
+        src.graphics.setAlpha(0.2);
+        this.dialog.show('', '✦ Svjetiljka se napunila!');
+        this.time.delayedCall(1500, () => this.dialog.hide());
+      }
+    });
   }
 }
