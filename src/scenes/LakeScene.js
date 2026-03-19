@@ -21,9 +21,9 @@ export default class LakeScene extends SceneBase {
 
     // Reflection in water (hint for invisible bridge)
     const reflectionGraphics = this.add.graphics();
-    reflectionGraphics.fillStyle(0x1a2a4a, 0.7);
+    reflectionGraphics.fillStyle(0x2a4a6a, 0.9);
     reflectionGraphics.fillRect(140, 105, 200, 6);
-    reflectionGraphics.fillStyle(0x2a3a5a, 0.4);
+    reflectionGraphics.fillStyle(0x3a5a7a, 0.6);
     reflectionGraphics.fillRect(140, 100, 200, 4);
 
     // Visible shores (only edges)
@@ -51,10 +51,46 @@ export default class LakeScene extends SceneBase {
     // One collider for entire bridge
     this.physics.add.collider(this.player.sprite, this.bridgeGroup);
 
+    // Water physics blockers — solid except at bridge level (y=112-128)
+    this.waterGroup = this.physics.add.staticGroup();
+
+    // Top water block (above bridge)
+    const wTop = this.waterGroup.create(240, 96, null);
+    wTop.setVisible(false).setSize(320, 32).refreshBody(); // covers x=80-400, y=80-112
+
+    // Bottom water block (below bridge)
+    const wBot = this.waterGroup.create(240, 174, null);
+    wBot.setVisible(false).setSize(320, 92).refreshBody(); // covers x=80-400, y=128-220
+
+    // Left water side (left of bridge start)
+    const wLeft = this.waterGroup.create(110, 120, null);
+    wLeft.setVisible(false).setSize(60, 16).refreshBody(); // covers x=80-140, y=112-128
+
+    // Right water side (right of bridge end)
+    const wRight = this.waterGroup.create(370, 120, null);
+    wRight.setVisible(false).setSize(60, 16).refreshBody(); // covers x=340-400, y=112-128
+
+    this.physics.add.collider(this.player.sprite, this.waterGroup);
+
+    // Bridge entry guide — glowing stepping stones on left shore
+    const entryGuide = this.add.graphics();
+    entryGuide.fillStyle(0x4a8a6a, 0.8);
+    entryGuide.fillRect(95, 115, 10, 10);  // stone 1
+    entryGuide.fillStyle(0x3a7a5a, 0.6);
+    entryGuide.fillRect(110, 116, 8, 8);   // stone 2 (leads to bridge)
+    entryGuide.fillStyle(0x5aaa7a, 0.5);
+    entryGuide.fillRect(82, 114, 8, 8);    // stone 3 (entry hint)
+
     // Trees around lake
     this._createTrees([
-      [30, 50], [60, 280], [440, 50], [450, 280],
-      [30, 200], [450, 150]
+      // Left side walls
+      [30, 50], [30, 200], [30, 270],
+      // Above lake — blocks walking over the top
+      [100, 62], [160, 58], [220, 60], [280, 58], [340, 62],
+      // Below lake — blocks walking under the bottom
+      [100, 238], [160, 242], [220, 240], [280, 242], [340, 238],
+      // Right side walls
+      [450, 50], [450, 270],
     ]);
 
     // Mushrooms
