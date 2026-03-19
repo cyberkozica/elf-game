@@ -9,31 +9,57 @@ export default class LakeScene extends SceneBase {
   create() {
     this._baseCreate('MAGIČNO JEZERO', 0x03080f);
 
-    // Override player start position (entering from left)
-    this.player.sprite.setPosition(40, 160);
+    // Player enters from left AT bridge level — no need to figure out height
+    this.player.sprite.setPosition(40, 120);
 
-    // Lake — dark water in center
+    // Lake — dark water body
     const lake = this.add.graphics();
     lake.fillStyle(0x050a1a);
-    lake.fillRect(80, 80, 320, 140);
+    lake.fillRect(80, 80, 320, 140);  // x=80-400, y=80-220
     lake.lineStyle(1, 0x0a1a3a);
     lake.strokeRect(80, 80, 320, 140);
 
-    // Reflection in water (hint for invisible bridge)
-    const reflectionGraphics = this.add.graphics();
-    reflectionGraphics.fillStyle(0x2a4a6a, 0.9);
-    reflectionGraphics.fillRect(140, 105, 200, 6);
-    reflectionGraphics.fillStyle(0x3a5a7a, 0.6);
-    reflectionGraphics.fillRect(140, 100, 200, 4);
+    // Reflection in water — hint for the invisible bridge path
+    const ref = this.add.graphics();
+    ref.fillStyle(0x2a4a6a, 0.9);
+    ref.fillRect(140, 105, 200, 6);
+    ref.fillStyle(0x3a5a7a, 0.6);
+    ref.fillRect(140, 100, 200, 4);
 
-    // Visible shores (only edges)
-    const visibleBridge = this.add.graphics();
-    visibleBridge.fillStyle(0x3a2a1a);
-    visibleBridge.fillRect(80, 116, 60, 8);   // left shore
-    visibleBridge.fillRect(340, 116, 60, 8);  // right shore
+    // Visible shores connecting player to bridge
+    const shores = this.add.graphics();
+    shores.fillStyle(0x3a2a1a);
+    shores.fillRect(80, 116, 60, 8);   // left shore x=80-140, y=116-124
+    shores.fillRect(340, 116, 60, 8);  // right shore x=340-400, y=116-124
 
-    // INVISIBLE BRIDGE — physics path, revealed by lantern light
-    // One static group for entire bridge, one collider call
+    // WATER PHYSICS — solid lake body, gap only at bridge level (y=112-128)
+    this.waterGroup = this.physics.add.staticGroup();
+
+    // Top water: x=80-400, y=80-112
+    const wTop = this.waterGroup.create(240, 96, null);
+    wTop.setVisible(false).setSize(320, 32).refreshBody();
+
+    // Bottom water: x=80-400, y=128-220
+    const wBot = this.waterGroup.create(240, 174, null);
+    wBot.setVisible(false).setSize(320, 92).refreshBody();
+
+    this.physics.add.collider(this.player.sprite, this.waterGroup);
+
+    // BARRIER WALLS — solid invisible walls above and below the entire lake
+    // Prevents player from walking around the lake vertically
+    this.barrierGroup = this.physics.add.staticGroup();
+
+    // Top barrier (full width, just above lake)
+    const bTop = this.barrierGroup.create(240, 73, null);
+    bTop.setVisible(false).setSize(480, 14).refreshBody();  // y=66-80
+
+    // Bottom barrier (full width, just below lake)
+    const bBot = this.barrierGroup.create(240, 227, null);
+    bBot.setVisible(false).setSize(480, 14).refreshBody();  // y=220-234
+
+    this.physics.add.collider(this.player.sprite, this.barrierGroup);
+
+    // INVISIBLE BRIDGE — one staticGroup, tiles revealed by lantern
     this.bridgeGroup = this.physics.add.staticGroup();
     this.bridgeTiles = [];
     for (let bx = 140; bx < 340; bx += 20) {
@@ -48,59 +74,26 @@ export default class LakeScene extends SceneBase {
       blocker.setVisible(false).setSize(20, 8).refreshBody();
       this.bridgeTiles.push({ tile, bx });
     }
-    // One collider for entire bridge
     this.physics.add.collider(this.player.sprite, this.bridgeGroup);
 
-    // Water physics blockers — solid except at bridge level (y=112-128)
-    this.waterGroup = this.physics.add.staticGroup();
-
-    // Top water block (above bridge)
-    const wTop = this.waterGroup.create(240, 96, null);
-    wTop.setVisible(false).setSize(320, 32).refreshBody(); // covers x=80-400, y=80-112
-
-    // Bottom water block (below bridge)
-    const wBot = this.waterGroup.create(240, 174, null);
-    wBot.setVisible(false).setSize(320, 92).refreshBody(); // covers x=80-400, y=128-220
-
-    // Left water side (left of bridge start)
-    const wLeft = this.waterGroup.create(110, 120, null);
-    wLeft.setVisible(false).setSize(60, 16).refreshBody(); // covers x=80-140, y=112-128
-
-    // Right water side (right of bridge end)
-    const wRight = this.waterGroup.create(370, 120, null);
-    wRight.setVisible(false).setSize(60, 16).refreshBody(); // covers x=340-400, y=112-128
-
-    this.physics.add.collider(this.player.sprite, this.waterGroup);
-
-    // Bridge entry guide — glowing stepping stones on left shore
-    const entryGuide = this.add.graphics();
-    entryGuide.fillStyle(0x4a8a6a, 0.8);
-    entryGuide.fillRect(95, 115, 10, 10);  // stone 1
-    entryGuide.fillStyle(0x3a7a5a, 0.6);
-    entryGuide.fillRect(110, 116, 8, 8);   // stone 2 (leads to bridge)
-    entryGuide.fillStyle(0x5aaa7a, 0.5);
-    entryGuide.fillRect(82, 114, 8, 8);    // stone 3 (entry hint)
-
-    // Trees around lake
+    // Decorative trees (barriers are walls, trees are just atmosphere)
     this._createTrees([
-      // Left side walls
-      [30, 50], [30, 200], [30, 270],
-      // Above lake — blocks walking over the top
-      [100, 62], [160, 58], [220, 60], [280, 58], [340, 62],
-      // Below lake — blocks walking under the bottom
-      [100, 238], [160, 242], [220, 240], [280, 242], [340, 238],
-      // Right side walls
-      [450, 50], [450, 270],
+      [30, 50],  [450, 50],
+      [30, 260], [450, 260],
+      [30, 160], [450, 160],
+      // Trees framing the lake area (decorative)
+      [60, 50], [420, 50],
+      [60, 260], [420, 260],
     ]);
 
-    // Mushrooms
-    this._createMushrooms([[50, 130], [440, 130]]);
+    // Mushrooms — accessible from bridge level
+    this._createMushrooms([[50, 120], [440, 120]]);
 
-    // Ent on right shore (already awake — recognizes the elf)
-    this.ent = new Ent(this, 420, 160);
+    // Ent on right shore (already awake)
+    this.ent = new Ent(this, 420, 120);
     this.ent.wake();
 
-    // Rune ᚠ — at end of invisible bridge
+    // Rune ᚠ at end of bridge
     this.rune = new Rune(this, 320, 120, 'ᚠ');
     this.rune.label.setVisible(false);
 
