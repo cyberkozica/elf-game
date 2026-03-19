@@ -2,6 +2,8 @@
 import Player from '../objects/Player.js';
 import Lantern from '../objects/Lantern.js';
 import HUD from '../ui/HUD.js';
+import Ent from '../objects/Ent.js';
+import DialogBox from '../ui/DialogBox.js';
 
 export default class ForestScene extends Phaser.Scene {
   constructor() { super('Forest'); }
@@ -32,6 +34,12 @@ export default class ForestScene extends Phaser.Scene {
 
     this.collectedRunes = [];
     this.hud = new HUD(this);
+
+    this.ent = new Ent(this, 380, 200);
+    this.dialog = new DialogBox(this);
+
+    // Tipka E za interakciju
+    this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
   }
 
   _createTrees() {
@@ -60,5 +68,24 @@ export default class ForestScene extends Phaser.Scene {
     this.player.update();
     this.lantern.update(delta);
     this.hud.update(this.lantern.getEnergy(), this.collectedRunes);
+
+    // Provjeri blizinu Enta i interakciju
+    const dist = Phaser.Math.Distance.Between(
+      this.player.x, this.player.y,
+      this.ent.x, this.ent.y
+    );
+
+    if (dist < 60 && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+      if (!this.ent.isAwake()) {
+        this.ent.wake();
+        this.dialog.show('Drevno drvo',
+          '"Ah... svjetlo... dugo nisam osjetio toplinu. Pronađi runski kamen, mladi vilenjače."');
+      } else if (!this.dialog.visible) {
+        this.dialog.show('Drevno drvo',
+          '"Slijedi sjaj rune prema sjeveru."');
+      } else {
+        this.dialog.hide();
+      }
+    }
   }
 }
