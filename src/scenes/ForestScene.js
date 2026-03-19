@@ -86,6 +86,8 @@ export default class ForestScene extends Phaser.Scene {
     this.exitLabel = this.add.text(445, 170, 'JEZERO', {
       fontSize: '7px', color: '#8a7a1a', letterSpacing: 2
     }).setOrigin(0.5).setDepth(15).setVisible(false);
+
+    this._transitioning = false;
   }
 
   _createTrees() {
@@ -175,7 +177,8 @@ export default class ForestScene extends Phaser.Scene {
       this.exitLabel.setVisible(true);
 
       // Prijelaz kad vilenjak dođe do desnog ruba
-      if (this.player.x > 460) {
+      if (this.player.x > 460 && !this._transitioning) {
+        this._transitioning = true;
         this.scene.start('Lake', { runes: this.collectedRunes });
       }
     }
