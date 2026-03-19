@@ -37,7 +37,7 @@ export default class HeartScene extends SceneBase {
 
     // Portal (inactive initially)
     this.portal = this.add.graphics();
-    this.portalActive = false;
+    this.portalActivated = false;
 
     // Trees around edges
     this._createTrees([
@@ -56,7 +56,6 @@ export default class HeartScene extends SceneBase {
     this.lastRune.label.setVisible(false);
     this.lastRune.sprite.setVisible(false);
 
-    this.portalActivated = false;
     this._transitioning = false;
   }
 
