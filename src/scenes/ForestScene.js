@@ -4,6 +4,7 @@ import Lantern from '../objects/Lantern.js';
 import HUD from '../ui/HUD.js';
 import Ent from '../objects/Ent.js';
 import DialogBox from '../ui/DialogBox.js';
+import Rune from '../objects/Rune.js';
 
 export default class ForestScene extends Phaser.Scene {
   constructor() { super('Forest'); }
@@ -37,6 +38,10 @@ export default class ForestScene extends Phaser.Scene {
 
     this.ent = new Ent(this, 380, 200);
     this.dialog = new DialogBox(this);
+
+    // Runa skrivena — vidljiva samo u radijusu svjetla
+    this.rune = new Rune(this, 150, 160, 'ᚱ');
+    this.rune.label.setVisible(false); // Skrivena dok svjetlo ne dođe
 
     // Tipka E za interakciju
     this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
@@ -85,6 +90,24 @@ export default class ForestScene extends Phaser.Scene {
           '"Slijedi sjaj rune prema sjeveru."');
       } else {
         this.dialog.hide();
+      }
+    }
+
+    // Otkrij runu ako je svjetlo blizu
+    if (!this.rune.isCollected()) {
+      const distToRune = Phaser.Math.Distance.Between(
+        this.player.x, this.player.y,
+        this.rune.x, this.rune.y
+      );
+      const inLight = distToRune < this.lantern.state.getRadius();
+      this.rune.label.setVisible(inLight);
+
+      // Skupi runu dodirom
+      if (inLight && distToRune < 24) {
+        this.rune.collect();
+        this.collectedRunes.push('ᚱ');
+        this.dialog.show('', '✦ Pronašla si runu ᚱ!');
+        this.time.delayedCall(2000, () => this.dialog.hide());
       }
     }
   }
