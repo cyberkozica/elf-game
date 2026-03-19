@@ -1,6 +1,7 @@
 // src/scenes/ForestScene.js
 import Player from '../objects/Player.js';
 import Lantern from '../objects/Lantern.js';
+import HUD from '../ui/HUD.js';
 
 export default class ForestScene extends Phaser.Scene {
   constructor() { super('Forest'); }
@@ -28,6 +29,9 @@ export default class ForestScene extends Phaser.Scene {
     this.add.text(240, 10, 'ULAZ U ŠUMU', {
       fontSize: '10px', color: '#2d5a27', letterSpacing: 3
     }).setOrigin(0.5, 0);
+
+    this.collectedRunes = [];
+    this.hud = new HUD(this);
   }
 
   _createTrees() {
@@ -55,5 +59,6 @@ export default class ForestScene extends Phaser.Scene {
   update(time, delta) {
     this.player.update();
     this.lantern.update(delta);
+    this.hud.update(this.lantern.getEnergy(), this.collectedRunes);
   }
 }
