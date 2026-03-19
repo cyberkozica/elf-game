@@ -26,6 +26,7 @@ export default class Rune {
   }
 
   _draw(x, y) {
+    this.sprite.setDepth(4);
     this.sprite.fillStyle(0x1a1a2a);
     this.sprite.fillRect(x - 10, y - 12, 20, 24);
     this.sprite.lineStyle(1, 0x4a4a8a);
@@ -33,7 +34,7 @@ export default class Rune {
 
     this.label = this.scene.add.text(x, y, this.state.symbol, {
       fontSize: '12px', color: '#8a8aee', fontFamily: 'serif'
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(6);
   }
 
   collect() {

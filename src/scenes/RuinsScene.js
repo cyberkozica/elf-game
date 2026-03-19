@@ -31,8 +31,8 @@ export default class RuinsScene extends SceneBase {
 
     this.player.sprite.setPosition(40, 160);
 
-    // Stone floor
-    const floor = this.add.graphics();
+    // Stone floor (depth 1 — below player at depth 5)
+    const floor = this.add.graphics().setDepth(1);
     floor.fillStyle(0x1a1510);
     floor.fillRect(60, 60, 360, 200);
     floor.lineStyle(1, 0x2a2018);
@@ -44,7 +44,7 @@ export default class RuinsScene extends SceneBase {
     }
 
     // Temple wall with hint (order visible only with lantern)
-    this.add.graphics().fillStyle(0x1a1510).fillRect(160, 30, 160, 30);
+    this.add.graphics().setDepth(1).fillStyle(0x1a1510).fillRect(160, 30, 160, 30);
     this.hintText = this.add.text(240, 45, 'ᚷ → ᚱ → ᚹ → ᚠ', {
       fontSize: '11px', color: '#5a4a2a', fontFamily: 'serif'
     }).setOrigin(0.5).setDepth(5).setVisible(false);
@@ -57,7 +57,7 @@ export default class RuinsScene extends SceneBase {
       { x: 340, y: 180, sym: 'ᚠ' },
     ];
     this.pillars = pillarData.map(({ x, y, sym }) => {
-      const g = this.add.graphics();
+      const g = this.add.graphics().setDepth(2);
       g.fillStyle(0x2a2018);
       g.fillRect(-12, -30, 24, 40);
       g.lineStyle(1, 0x4a3828);

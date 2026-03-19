@@ -9,65 +9,71 @@ export default class LakeScene extends SceneBase {
   create() {
     this._baseCreate('MAGIČNO JEZERO', 0x03080f);
 
-    // Player enters from left, at bridge level (y=120)
     this.player.sprite.setPosition(40, 120);
-    // Slim physics body (full texture is 42px tall — can't fit through any gap)
-    this.player.sprite.body.setSize(14, 20).setOffset(5, 12);
-    // Player renders above the lake (depth > 1)
-    this.player.sprite.setDepth(5);
+    // Slim physics body so it fits through the 20px bridge corridor
+    this.player.sprite.body.setSize(14, 18).setOffset(5, 14);
 
-    // Lake — drawn at depth 1 so player always appears on top
+    // Lake (depth 1, player is depth 5 from _baseCreate)
     const lake = this.add.graphics().setDepth(1);
     lake.fillStyle(0x050a1a);
     lake.fillRect(80, 80, 320, 140);  // x=80-400, y=80-220
     lake.lineStyle(1, 0x0a1a3a);
     lake.strokeRect(80, 80, 320, 140);
 
-    // Visible path on both shores (depth 3, above lake)
-    const shores = this.add.graphics().setDepth(3);
-    shores.fillStyle(0x5a4a2a);
-    shores.fillRect(0, 113, 80, 14);    // left shore
-    shores.fillRect(400, 113, 80, 14);  // right shore
+    // Visible ground path — clearly shows where to walk
+    const ground = this.add.graphics().setDepth(2);
+    ground.fillStyle(0x5a4a2a);
+    ground.fillRect(0, 112, 80, 16);    // left shore: x=0-80
+    ground.fillRect(400, 112, 80, 16);  // right shore: x=400-480
+    ground.fillRect(80, 112, 320, 16);  // bridge ground strip (shown over lake)
 
-    // Reflection strip — visual hint of bridge path
+    // Reflection on water (depth 2)
     const ref = this.add.graphics().setDepth(2);
-    ref.fillStyle(0x2a4a6a, 0.7);
-    ref.fillRect(80, 113, 320, 14);
+    ref.fillStyle(0x0a1a3a, 0.6);
+    ref.fillRect(80, 80, 320, 30);   // top reflection
+    ref.fillStyle(0x0a1a3a, 0.6);
+    ref.fillRect(80, 192, 320, 28);  // bottom reflection
 
-    // WATER PHYSICS
-    // Bridge corridor: y=110-130 (20px gap matches slimmed body height)
+    // WATER PHYSICS — blocks the lake area above and below the bridge strip
+    // Bridge corridor: y=112-128 (16px, player body is 18px — tight but correct)
+    // Actually use y=110-130 for the gap (20px)
     this.waterGroup = this.physics.add.staticGroup();
+
+    // Top water: covers full lake width, y=80-110
     const wTop = this.waterGroup.create(240, 95, null);
-    wTop.setVisible(false).setSize(320, 30).refreshBody();  // y=80-110
+    wTop.setVisible(false).setSize(320, 30).refreshBody();  // center 95, half=15: y=80-110
+
+    // Bottom water: covers full lake width, y=130-220
     const wBot = this.waterGroup.create(240, 175, null);
-    wBot.setVisible(false).setSize(320, 90).refreshBody();  // y=130-220
+    wBot.setVisible(false).setSize(320, 90).refreshBody();  // center 175, half=45: y=130-220
+
     this.physics.add.collider(this.player.sprite, this.waterGroup);
 
-    // BARRIER WALLS — full-width, no vertical workaround possible
+    // BARRIER WALLS — full-width horizontal walls prevent going around vertically
     this.barrierGroup = this.physics.add.staticGroup();
-    const bTop = this.barrierGroup.create(240, 72, null);
-    bTop.setVisible(false).setSize(480, 16).refreshBody();  // y=64-80
-    const bBot = this.barrierGroup.create(240, 228, null);
-    bBot.setVisible(false).setSize(480, 16).refreshBody();  // y=220-236
+    const bTop = this.barrierGroup.create(240, 70, null);
+    bTop.setVisible(false).setSize(480, 20).refreshBody();  // y=60-80
+    const bBot = this.barrierGroup.create(240, 230, null);
+    bBot.setVisible(false).setSize(480, 20).refreshBody();  // y=220-240
     this.physics.add.collider(this.player.sprite, this.barrierGroup);
 
-    // BRIDGE TILES — appear in lantern light, depth 4 (above lake, below player)
+    // BRIDGE TILES — reveal in lantern light, depth 3 (above lake, below player)
     this.bridgeTiles = [];
     for (let bx = 80; bx < 400; bx += 20) {
-      const tile = this.add.graphics().setDepth(4);
-      tile.fillStyle(0x6a5a3a);
-      tile.fillRect(0, 0, 19, 14);
+      const tile = this.add.graphics().setDepth(3);
+      tile.fillStyle(0x7a6a4a);
+      tile.fillRect(1, 0, 18, 16);
       tile.fillStyle(0x4a3a1a);
-      tile.fillRect(0, 13, 19, 1);
+      tile.fillRect(1, 15, 18, 1);
       tile.x = bx;
-      tile.y = 113;
+      tile.y = 112;
       tile.setVisible(false);
       this.bridgeTiles.push({ tile, bx });
     }
 
     this._createTrees([
       [30, 50],  [450, 50],
-      [30, 260], [450, 260],
+      [30, 265], [450, 265],
       [30, 165], [450, 165],
     ]);
 

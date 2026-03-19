@@ -12,6 +12,7 @@ export default class SceneBase extends Phaser.Scene {
 
     // Player — subclass overrides position with setPosition() after _baseCreate()
     this.player = new Player(this, 60, 160);
+    this.player.sprite.setDepth(5);  // always above scenery (depth 1-4)
 
     // Lantern
     this.lantern = new Lantern(this, this.player);
