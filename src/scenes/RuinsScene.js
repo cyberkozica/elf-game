@@ -113,8 +113,9 @@ export default class RuinsScene extends SceneBase {
   }
 
   _updateHint() {
+    // Only visible when very close to the temple wall — player must walk up to it
     const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, 240, 45);
-    this.hintText.setVisible(d < this.lantern.state.getRadius());
+    this.hintText.setVisible(d < 60);
   }
 
   _updatePillars() {
@@ -178,14 +179,16 @@ export default class RuinsScene extends SceneBase {
   }
 
   _updateEnt() {
-    if (!this.ent.isAwake()) return;
     const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.ent.x, this.ent.y);
     if (dist < 60 && Phaser.Input.Keyboard.JustDown(this.keyE)) {
-      if (!this.dialog.visible) {
+      if (!this.ent.isAwake()) {
+        this.dialog.show('Drevno drvo', '"...zzz... stari stupovi... pamte red... zzz..."');
+        this.time.delayedCall(2500, () => this.dialog.hide());
+      } else if (!this.dialog.visible) {
         this.dialog.show('Drevno drvo',
           this.rune.isCollected()
-            ? '"Srce šume je na istoku. Ondje leži posljednja runa — u mom srcu."'
-            : '"Skupi runu i idi prema srcu šume."');
+            ? '"Srce šume te čeka na istoku."'
+            : '"Skupi runu i idi prema istoku."');
       } else {
         this.dialog.hide();
       }
