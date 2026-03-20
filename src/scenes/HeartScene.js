@@ -78,7 +78,7 @@ export default class HeartScene extends SceneBase {
     if (inLight && !this.ent.isAwake()) {
       this.ent.wake();
       this.dialog.show('Drevno drvo',
-        '"Ti si stigla... Osjećam svjetlo tvoje svjetiljke. Moje sjeme — runa ᚷ — tvoje je."');
+        '"Ti si stigao... Osjećam svjetlo tvoje svjetiljke. Moje sjeme — runa ᚷ — tvoje je."');
       this.time.delayedCall(3000, () => {
         this.dialog.hide();
         this.lastRune.sprite.setVisible(true);
@@ -108,7 +108,7 @@ export default class HeartScene extends SceneBase {
     if (inLight && d < 24 && this.ent.isAwake()) {
       this.lastRune.collect();
       this.collectedRunes.push('ᚷ');
-      this.dialog.show('', '✦ Pronašla si posljednju runu ᚷ!');
+      this.dialog.show('', '✦ Pronašao si posljednju runu ᚷ!');
       this.time.delayedCall(2000, () => this.dialog.hide());
     }
   }
@@ -146,7 +146,7 @@ export default class HeartScene extends SceneBase {
     this.portal.fillCircle(240, 160, 30);
 
     this.dialog.show('Drevno drvo',
-      '"Šuma te pušta. Pronašla si put kući. Idi, slobodna si."');
+      '"Šuma te pušta. Pronašao si put kući. Idi, slobodan si."');
 
     this.time.delayedCall(3000, () => {
       if (!this._transitioning) {

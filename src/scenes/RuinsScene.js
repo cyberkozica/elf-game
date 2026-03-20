@@ -43,13 +43,18 @@ export default class RuinsScene extends SceneBase {
       floor.lineBetween(60, fy, 420, fy);
     }
 
-    // Temple wall with hint (order visible only with lantern)
+    // Randomize correct sequence each session
+    const allSymbols = ['ᚷ', 'ᚱ', 'ᚹ', 'ᚠ'];
+    const correctOrder = Phaser.Utils.Array.Shuffle([...allSymbols]);
+    this.puzzle = new PuzzleState(correctOrder);
+
+    // Temple wall with hint — shows randomized order, only visible in lantern light
     this.add.graphics().setDepth(1).fillStyle(0x1a1510).fillRect(160, 30, 160, 30);
-    this.hintText = this.add.text(240, 45, 'ᚷ → ᚱ → ᚹ → ᚠ', {
+    this.hintText = this.add.text(240, 45, correctOrder.join(' → '), {
       fontSize: '11px', color: '#5a4a2a', fontFamily: 'serif'
     }).setOrigin(0.5).setDepth(5).setVisible(false);
 
-    // 4 rune pillars
+    // 4 rune pillars — fixed positions, fixed symbols
     const pillarData = [
       { x: 140, y: 130, sym: 'ᚷ' },
       { x: 200, y: 180, sym: 'ᚱ' },
@@ -73,9 +78,6 @@ export default class RuinsScene extends SceneBase {
 
       return { g, label, zone, sym, x, y, lit: false };
     });
-
-    // Puzzle logic
-    this.puzzle = new PuzzleState(['ᚷ', 'ᚱ', 'ᚹ', 'ᚠ']);
 
     // Door (removed when puzzle solved)
     this.door = this.add.graphics();
@@ -170,7 +172,7 @@ export default class RuinsScene extends SceneBase {
     if (inLight && d < 24) {
       this.rune.collect();
       this.collectedRunes.push('ᚹ');
-      this.dialog.show('', '✦ Pronašla si runu ᚹ!');
+      this.dialog.show('', '✦ Pronašao si runu ᚹ!');
       this.time.delayedCall(2000, () => this.dialog.hide());
     }
   }
@@ -182,7 +184,7 @@ export default class RuinsScene extends SceneBase {
       if (!this.dialog.visible) {
         this.dialog.show('Drevno drvo',
           this.rune.isCollected()
-            ? '"Srce šume je na sjeveru. Ondje leži posljednja runa — u mom srcu."'
+            ? '"Srce šume je na istoku. Ondje leži posljednja runa — u mom srcu."'
             : '"Skupi runu i idi prema srcu šume."');
       } else {
         this.dialog.hide();

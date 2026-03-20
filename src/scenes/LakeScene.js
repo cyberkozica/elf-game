@@ -20,12 +20,11 @@ export default class LakeScene extends SceneBase {
     lake.lineStyle(1, 0x0a1a3a);
     lake.strokeRect(80, 80, 320, 140);
 
-    // Visible ground path — clearly shows where to walk
+    // Visible shores left and right of the lake — bridge over water is invisible until lit
     const ground = this.add.graphics().setDepth(2);
     ground.fillStyle(0x5a4a2a);
     ground.fillRect(0, 112, 80, 16);    // left shore: x=0-80
     ground.fillRect(400, 112, 80, 16);  // right shore: x=400-480
-    ground.fillRect(80, 112, 320, 16);  // bridge ground strip (shown over lake)
 
     // Reflection on water (depth 2)
     const ref = this.add.graphics().setDepth(2);
@@ -114,7 +113,7 @@ export default class LakeScene extends SceneBase {
     if (inLight && d < 24) {
       this.rune.collect();
       this.collectedRunes.push('ᚠ');
-      this.dialog.show('', '✦ Pronašla si runu ᚠ!');
+      this.dialog.show('', '✦ Pronašao si runu ᚠ!');
       this.time.delayedCall(2000, () => this.dialog.hide());
     }
   }

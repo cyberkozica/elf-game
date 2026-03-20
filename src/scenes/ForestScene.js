@@ -33,6 +33,14 @@ export default class ForestScene extends Phaser.Scene {
       fontSize: '10px', color: '#2d5a27', letterSpacing: 3
     }).setOrigin(0.5, 0);
 
+    // Kratki hint za kontrole — nestane nakon 5 sekundi
+    const ctrlHint = this.add.text(240, 295, '[ ← ↑ → ↓ ] kretanje    [ E ] razgovor / akcija', {
+      fontSize: '8px', color: '#4a6a4a', letterSpacing: 1
+    }).setOrigin(0.5, 1).setDepth(20);
+    this.time.delayedCall(5000, () => {
+      this.tweens.add({ targets: ctrlHint, alpha: 0, duration: 1000, onComplete: () => ctrlHint.destroy() });
+    });
+
     this.collectedRunes = [];
     this.hud = new HUD(this);
 
@@ -130,7 +138,7 @@ export default class ForestScene extends Phaser.Scene {
           '"Ah... svjetlo... dugo nisam osjetio toplinu. Pronađi runski kamen, mladi vilenjače."');
       } else if (!this.dialog.visible) {
         this.dialog.show('Drevno drvo',
-          '"Slijedi sjaj rune prema sjeveru."');
+          '"Slijedi sjaj rune prema zapadu."');
       } else {
         this.dialog.hide();
       }
@@ -149,7 +157,7 @@ export default class ForestScene extends Phaser.Scene {
       if (inLight && distToRune < 24) {
         this.rune.collect();
         this.collectedRunes.push('ᚱ');
-        this.dialog.show('', '✦ Pronašla si runu ᚱ!');
+        this.dialog.show('', '✦ Pronašao si runu ᚱ!');
         this.time.delayedCall(2000, () => this.dialog.hide());
       }
     }
