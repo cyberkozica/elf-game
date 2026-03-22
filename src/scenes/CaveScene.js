@@ -67,6 +67,7 @@ export default class CaveScene extends SceneBase {
     this.rune.label.setVisible(false);
     this.rune.sprite.setVisible(false);
 
+    this._entSpokenAfterRune = false;
     this._transitioning = false;
   }
 
@@ -292,10 +293,11 @@ export default class CaveScene extends SceneBase {
         this.dialog.show('Drevno drvo', '"...zzz... kristali... trepere... zzz..."');
         this.time.delayedCall(2500, () => this.dialog.hide());
       } else if (!this.dialog.visible) {
-        this.dialog.show('Drevno drvo',
-          this.rune.isCollected()
-            ? '"Ruševine te čekaju na istoku. Stari stupovi pamte red."'
-            : '"Uzmi runu iz kristalnog srca špilje."');
+        const msg = this.rune.isCollected()
+          ? '"Ruševine te čekaju na istoku. Stari stupovi pamte red."'
+          : '"Uzmi runu iz kristalnog srca špilje."';
+        this.dialog.show('Drevno drvo', msg);
+        if (this.rune.isCollected()) this._entSpokenAfterRune = true;
       } else {
         this.dialog.hide();
       }
@@ -303,7 +305,7 @@ export default class CaveScene extends SceneBase {
   }
 
   _checkExit() {
-    if (this.rune.isCollected() && this.player.x > 460 && !this._transitioning) {
+    if (this.rune.isCollected() && this._entSpokenAfterRune && this.player.x > 460 && !this._transitioning) {
       this._transitioning = true;
       this.scene.start('Ruins', { runes: this.collectedRunes });
     }

@@ -89,6 +89,7 @@ export default class LakeScene extends SceneBase {
     this.rune.label.setVisible(false);
 
     this.entSpoke = false;
+    this._entSpokenAfterRune = false;
     this._transitioning = false;
   }
 
@@ -128,10 +129,11 @@ export default class LakeScene extends SceneBase {
     if (dist < 60 && (Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) {
       if (!this.entSpoke || !this.dialog.visible) {
         this.entSpoke = true;
-        this.dialog.show('Drevno drvo',
-          this.rune.isCollected()
-            ? '"Dobro. Špilja kristala čeka te na istoku. Pazi na redoslijed svjetla."'
-            : '"Prođi mostom koji vidiš u odrazu vode, ne u stvarnosti."');
+        const msg = this.rune.isCollected()
+          ? '"Dobro. Špilja kristala čeka te na istoku. Pazi na redoslijed svjetla."'
+          : '"Prođi mostom koji vidiš u odrazu vode, ne u stvarnosti."';
+        this.dialog.show('Drevno drvo', msg);
+        if (this.rune.isCollected()) this._entSpokenAfterRune = true;
       } else {
         this.dialog.hide();
       }
@@ -139,7 +141,7 @@ export default class LakeScene extends SceneBase {
   }
 
   _checkExit() {
-    if (this.rune.isCollected() && this.player.x > 460 && !this._transitioning) {
+    if (this.rune.isCollected() && this._entSpokenAfterRune && this.player.x > 460 && !this._transitioning) {
       this._transitioning = true;
       this.scene.start('Cave', { runes: this.collectedRunes });
     }

@@ -99,6 +99,7 @@ export default class RuinsScene extends SceneBase {
     this.rune.label.setVisible(false);
     this.rune.sprite.setVisible(false);
 
+    this._entSpokenAfterRune = false;
     this._transitioning = false;
   }
 
@@ -190,10 +191,11 @@ export default class RuinsScene extends SceneBase {
         this.dialog.show('Drevno drvo', '"...zzz... stari stupovi... pamte red... zzz..."');
         this.time.delayedCall(2500, () => this.dialog.hide());
       } else if (!this.dialog.visible) {
-        this.dialog.show('Drevno drvo',
-          this.rune.isCollected()
-            ? '"Srce šume te čeka na istoku."'
-            : '"Skupi runu i idi prema istoku."');
+        const msg = this.rune.isCollected()
+          ? '"Srce šume te čeka na istoku."'
+          : '"Skupi runu i idi prema istoku."';
+        this.dialog.show('Drevno drvo', msg);
+        if (this.rune.isCollected()) this._entSpokenAfterRune = true;
       } else {
         this.dialog.hide();
       }
@@ -201,7 +203,7 @@ export default class RuinsScene extends SceneBase {
   }
 
   _checkExit() {
-    if (this.rune.isCollected() && this.player.x > 460 && !this._transitioning) {
+    if (this.rune.isCollected() && this._entSpokenAfterRune && this.player.x > 460 && !this._transitioning) {
       this._transitioning = true;
       this.scene.start('Heart', { runes: this.collectedRunes });
     }
