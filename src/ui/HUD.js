@@ -60,8 +60,11 @@ export default class HUD {
 
     // Ažuriraj rune slotove
     const symbols = ['ᚱ', 'ᚠ', 'ᛩ', 'ᚹ', 'ᚷ'];
+    const colors  = ['#8a8aee', '#8a8aee', '#44cc66', '#8a8aee', '#8a8aee'];
     symbols.forEach((sym, i) => {
-      this.runeTexts[i].setText(collectedRunes.includes(sym) ? sym : '');
+      const has = collectedRunes.includes(sym);
+      this.runeTexts[i].setText(has ? sym : '');
+      if (has) this.runeTexts[i].setColor(colors[i]);
     });
   }
 }
