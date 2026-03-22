@@ -34,7 +34,7 @@ export default class HUD {
     this.energyBar = scene.add.graphics();
     this.container.add(this.energyBar);
 
-    // Rune slotovi (5 runa: ᚱ ᚠ ᚢ ᚹ ᚷ)
+    // Rune slotovi (5 runa: ᚱ ᚠ ᛩ ᚹ ᚷ)
     this.runeTexts = [];
     for (let i = 0; i < 5; i++) {
       const slotBg = scene.add.graphics();
@@ -59,7 +59,7 @@ export default class HUD {
     this.energyBar.fillRect(28, 19, lanternEnergy, 6);
 
     // Ažuriraj rune slotove
-    const symbols = ['ᚱ', 'ᚠ', 'ᚢ', 'ᚹ', 'ᚷ'];
+    const symbols = ['ᚱ', 'ᚠ', 'ᛩ', 'ᚹ', 'ᚷ'];
     symbols.forEach((sym, i) => {
       this.runeTexts[i].setText(collectedRunes.includes(sym) ? sym : '');
     });

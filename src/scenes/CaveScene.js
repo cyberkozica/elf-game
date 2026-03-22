@@ -6,7 +6,7 @@ import Rune from '../objects/Rune.js';
 // Crystal cave between Lake and Ruins.
 // 5 crystals must be activated in the correct (randomised) order.
 // Wrong activation resets all progress. Stone altar shows the sequence.
-// Rune ᚢ is awarded when all 5 crystals are activated correctly.
+// Rune ᛩ is awarded when all 5 crystals are activated correctly.
 
 const CRYSTAL_COLORS = [0x44aaff, 0x00eeff, 0x7766ff, 0x00cccc, 0xaaaaee];
 const CRYSTAL_LABELS = ['◆', '◆', '◆', '◆', '◆'];
@@ -62,8 +62,8 @@ export default class CaveScene extends SceneBase {
     // Ent — wakes when puzzle solved
     this.ent = new Ent(this, 440, 160);
 
-    // Rune ᚢ — hidden until all crystals activated
-    this.rune = new Rune(this, 440, 160, 'ᚢ');
+    // Rune ᛩ — hidden until all crystals activated
+    this.rune = new Rune(this, 440, 160, 'ᛩ');
     this.rune.label.setVisible(false);
     this.rune.sprite.setVisible(false);
 
@@ -255,7 +255,7 @@ export default class CaveScene extends SceneBase {
   _allCrystalsActivated() {
     this.crystalSolved = true;
     this.ent.wake();
-    this.dialog.show('Drevno drvo', '"Kamenje pamti... Uzeći si runu ᚢ. Putuj prema istoku — ruševine čekaju."');
+    this.dialog.show('Drevno drvo', '"Kamenje pamti... Uzeći si runu ᛩ. Putuj prema istoku — ruševine čekaju."');
     this.time.delayedCall(3500, () => {
       this.dialog.hide();
       this.rune.sprite.setVisible(true);
@@ -272,8 +272,8 @@ export default class CaveScene extends SceneBase {
     this.rune.label.setVisible(inLight);
     if (inLight && d < 24) {
       this.rune.collect();
-      this.collectedRunes.push('ᚢ');
-      this.dialog.show('', '✦ Pronašao si runu ᚢ!');
+      this.collectedRunes.push('ᛩ');
+      this.dialog.show('', '✦ Pronašao si runu ᛩ!');
       this.time.delayedCall(2000, () => this.dialog.hide());
     }
   }
