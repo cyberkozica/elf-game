@@ -79,7 +79,7 @@ export default class HeartScene extends SceneBase {
     if (inLight && !this.ent.isAwake()) {
       this.ent.wake();
       this.dialog.show('Drevno drvo',
-        '"Ti si stigao... Osjećam svjetlo tvoje svjetiljke. Moje sjeme — runa ᚷ — tvoje je. Priđi bliže."');
+        '"Ti si stigao... Osjećam svjetlo tvoje svjetiljke. Moja sjemenka — runa ᚷ — tvoja je. Priđi bliže."');
       this.time.delayedCall(3500, () => this.dialog.hide());
     }
 
