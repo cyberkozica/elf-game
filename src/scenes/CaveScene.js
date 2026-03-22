@@ -73,6 +73,7 @@ export default class CaveScene extends SceneBase {
   update(time, delta) {
     this._baseUpdate(delta);
     this._updateMushrooms();
+    this._updateAltar();
     this._updateCrystals();
     this._updateRune();
     this._updateEnt();
@@ -186,14 +187,18 @@ export default class CaveScene extends SceneBase {
 
   // ─── Update methods ────────────────────────────────────────────────────────
 
+  _updateAltar() {
+    // Show hint only after 45 seconds AND when close to the altar
+    if (this._altarFilled) return;
+    if (this.time.now < 45000) return;
+    const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, 240, 160);
+    if (d >= 60) return;
+    this._altarFilled = true;
+    this._fillAltarSlots();
+  }
+
   _updateCrystals() {
     if (this.crystalSolved) return;
-
-    // Fill altar once (deferred because crystalOrder set after _buildAltar)
-    if (this._altarBuilt && this.crystalOrder && !this._altarFilled) {
-      this._altarFilled = true;
-      this._fillAltarSlots();
-    }
 
     this.crystals.forEach((crystal, idx) => {
       const d = Phaser.Math.Distance.Between(
