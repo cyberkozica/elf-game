@@ -8,13 +8,14 @@ import EndScene from './scenes/EndScene.js';
 
 const config = {
   type: Phaser.AUTO,
-  width: 480,
-  height: 320,
   pixelArt: true,
   backgroundColor: '#050f05',
   scale: {
+    parent: 'game',
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 480,
+    height: 320,
   },
   scene: [BootScene, MenuScene, ForestScene, LakeScene, RuinsScene, HeartScene, EndScene],
   physics: {
