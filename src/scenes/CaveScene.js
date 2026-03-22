@@ -261,7 +261,7 @@ export default class CaveScene extends SceneBase {
   _allCrystalsActivated() {
     this.crystalSolved = true;
     this.ent.wake();
-    this.dialog.show('Drevno drvo', '"Kamenje pamti... Uzeći si runu ᛩ. Putuj prema istoku — ruševine čekaju."');
+    this.dialog.show('Drevno drvo', '"Kamenje pamti... Uzeći si runu ᛩ. Putuj prema istoku — čekaju te začarane stube."');
     this.time.delayedCall(3500, () => {
       this.dialog.hide();
       this.rune.sprite.setVisible(true);
@@ -294,7 +294,7 @@ export default class CaveScene extends SceneBase {
         this.time.delayedCall(2500, () => this.dialog.hide());
       } else if (!this.dialog.visible) {
         const msg = this.rune.isCollected()
-          ? '"Ruševine te čekaju na istoku. Stari stupovi pamte red."'
+          ? '"Začarane stube čekaju te na istoku. Budi oprezan."'
           : '"Uzmi runu iz kristalnog srca špilje."';
         this.dialog.show('Drevno drvo', msg);
         if (this.rune.isCollected()) this._entSpokenAfterRune = true;
@@ -307,7 +307,7 @@ export default class CaveScene extends SceneBase {
   _checkExit() {
     if (this.rune.isCollected() && this._entSpokenAfterRune && this.player.x > 460 && !this._transitioning) {
       this._transitioning = true;
-      this.scene.start('Ruins', { runes: this.collectedRunes });
+      this.scene.start('Stairs', { runes: this.collectedRunes });
     }
   }
 }
