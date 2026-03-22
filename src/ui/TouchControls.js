@@ -23,16 +23,17 @@ export default class TouchControls {
     const R = 18;   // button radius
     const D = 25;   // depth (above HUD at 20)
 
-    // D-pad — bottom-left
-    const cx = 48, cy = 272;
-    const pad = 38;
+    // D-pad — bottom-left, inset so buttons don't clip canvas edges
+    // Canvas is 480×320. With R=18 and pad=36: left edge=68-36-18=14, bottom=258+36+18=312 ✓
+    const cx = 68, cy = 258;
+    const pad = 36;
     this._btn(scene, cx,       cy - pad, '▲', R, D, v => { this.up    = v; });
     this._btn(scene, cx,       cy + pad, '▼', R, D, v => { this.down  = v; });
     this._btn(scene, cx - pad, cy,       '◀', R, D, v => { this.left  = v; });
     this._btn(scene, cx + pad, cy,       '▶', R, D, v => { this.right = v; });
 
     // Action button — bottom-right
-    this._btn(scene, 436, 272, 'E', R, D, v => {
+    this._btn(scene, 430, 258, 'E', R, D, v => {
       if (v) this._actionFired = true;
     });
   }
