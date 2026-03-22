@@ -46,7 +46,7 @@ export default class EndScene extends Phaser.Scene {
     });
 
     // Main message
-    const mainText = this.add.text(240, 155, 'Pronašla si put kući.', {
+    const mainText = this.add.text(240, 155, 'Pronašao si put kući.', {
       fontSize: '14px', color: '#3aaa3a'
     }).setOrigin(0.5).setAlpha(0);
     this.tweens.add({ targets: mainText, alpha: 1, duration: 1000, delay: 2500 });
