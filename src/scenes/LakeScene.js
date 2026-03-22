@@ -83,7 +83,6 @@ export default class LakeScene extends SceneBase {
     this._createMushrooms([[40, 145], [435, 95]]);
 
     this.ent = new Ent(this, 430, 95);
-    this.ent.wake();
 
     this.rune = new Rune(this, 290, 95, 'ᚠ');
     this.rune.label.setVisible(false);
@@ -127,11 +126,15 @@ export default class LakeScene extends SceneBase {
       this.player.x, this.player.y, this.ent.x, this.ent.y
     );
     if (dist < 60 && (Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) {
-      if (!this.entSpoke || !this.dialog.visible) {
+      if (!this.ent.isAwake()) {
+        this.ent.wake();
+        this.dialog.show('Drevno drvo', '"Prođi mostom koji vidiš u odrazu vode, ne u stvarnosti."');
+        this.time.delayedCall(3500, () => this.dialog.hide());
+      } else if (!this.entSpoke || !this.dialog.visible) {
         this.entSpoke = true;
         const msg = this.rune.isCollected()
           ? '"Dobro. Špilja kristala čeka te na istoku. Pazi na redoslijed svjetla."'
-          : '"Prođi mostom koji vidiš u odrazu vode, ne u stvarnosti."';
+          : '"Most je tamo gore. Traži odraz."';
         this.dialog.show('Drevno drvo', msg);
         if (this.rune.isCollected()) this._entSpokenAfterRune = true;
       } else {
