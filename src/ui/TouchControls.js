@@ -48,7 +48,7 @@ export default class TouchControls {
       fontSize: '13px', color: '#5a9a5a'
     }).setOrigin(0.5).setDepth(depth + 1).setScrollFactor(0);
 
-    t.setInteractive(new Phaser.Geom.Circle(0, 0, r), Phaser.Geom.Circle.Contains);
+    t.setInteractive(new Phaser.Geom.Circle(0, 0, r * 1.8), Phaser.Geom.Circle.Contains);
     t.on('pointerdown', () => onChange(true));
     t.on('pointerup',   () => onChange(false));
     t.on('pointerout',  () => onChange(false));
