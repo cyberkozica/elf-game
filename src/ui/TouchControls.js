@@ -24,7 +24,7 @@ export default class TouchControls {
     const D = 25;   // depth (above HUD at 20)
 
     // D-pad — bottom-left
-    const cx = 48, cy = 272;
+    const cx = 62, cy = 260;
     const pad = 38;
     this._btn(scene, cx,       cy - pad, '▲', R, D, v => { this.up    = v; });
     this._btn(scene, cx,       cy + pad, '▼', R, D, v => { this.down  = v; });
