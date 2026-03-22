@@ -83,7 +83,7 @@ export default class HeartScene extends SceneBase {
       this.time.delayedCall(3500, () => this.dialog.hide());
     }
 
-    if (dist < 60 && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+    if (dist < 60 && (Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) {
       if (!this.ent.isAwake()) return;
 
       if (!this._runeRevealed) {
@@ -140,7 +140,7 @@ export default class HeartScene extends SceneBase {
 
     // Activate portal when player stands on ring and presses E
     const distToCenter = Phaser.Math.Distance.Between(this.player.x, this.player.y, 240, 160);
-    if (distToCenter < 40 && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+    if (distToCenter < 40 && (Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) {
       this._activatePortal();
     }
   }

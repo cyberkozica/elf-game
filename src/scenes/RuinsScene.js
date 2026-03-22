@@ -135,7 +135,7 @@ export default class RuinsScene extends SceneBase {
         pillar.label.setColor(inLight ? '#c8c840' : '#5a5a3a');
       }
 
-      if (d < 30 && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+      if (d < 30 && (Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) {
         const wasLength = this.puzzle.sequence.length;
         this.puzzle.press(pillar.sym);
 
@@ -185,7 +185,7 @@ export default class RuinsScene extends SceneBase {
 
   _updateEnt() {
     const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.ent.x, this.ent.y);
-    if (dist < 60 && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+    if (dist < 60 && (Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) {
       if (!this.ent.isAwake()) {
         this.dialog.show('Drevno drvo', '"...zzz... stari stupovi... pamte red... zzz..."');
         this.time.delayedCall(2500, () => this.dialog.hide());

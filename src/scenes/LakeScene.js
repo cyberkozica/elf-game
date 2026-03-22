@@ -125,7 +125,7 @@ export default class LakeScene extends SceneBase {
     const dist = Phaser.Math.Distance.Between(
       this.player.x, this.player.y, this.ent.x, this.ent.y
     );
-    if (dist < 60 && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+    if (dist < 60 && (Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) {
       if (!this.entSpoke || !this.dialog.visible) {
         this.entSpoke = true;
         this.dialog.show('Drevno drvo',

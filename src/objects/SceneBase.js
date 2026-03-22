@@ -3,6 +3,7 @@ import Player from './Player.js';
 import Lantern from './Lantern.js';
 import HUD from '../ui/HUD.js';
 import DialogBox from '../ui/DialogBox.js';
+import TouchControls from '../ui/TouchControls.js';
 
 export default class SceneBase extends Phaser.Scene {
   // Call from each subclass in create()
@@ -34,11 +35,14 @@ export default class SceneBase extends Phaser.Scene {
 
     // World bounds
     this.physics.world.setBounds(0, 0, 480, 320);
+
+    // Touch controls (no-op on desktop)
+    this.touch = new TouchControls(this);
   }
 
   // Call from each subclass in update()
   _baseUpdate(delta) {
-    this.player.update();
+    this.player.update(this.touch);
     this.lantern.update(delta);
     this.hud.update(this.lantern.getEnergy(), this.collectedRunes);
   }

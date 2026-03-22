@@ -5,6 +5,7 @@ import HUD from '../ui/HUD.js';
 import Ent from '../objects/Ent.js';
 import DialogBox from '../ui/DialogBox.js';
 import Rune from '../objects/Rune.js';
+import TouchControls from '../ui/TouchControls.js';
 
 export default class ForestScene extends Phaser.Scene {
   constructor() { super('Forest'); }
@@ -96,6 +97,7 @@ export default class ForestScene extends Phaser.Scene {
     }).setOrigin(0.5).setDepth(15).setVisible(false);
 
     this._transitioning = false;
+    this.touch = new TouchControls(this);
   }
 
   _createTrees() {
@@ -121,7 +123,7 @@ export default class ForestScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    this.player.update();
+    this.player.update(this.touch);
     this.lantern.update(delta);
     this.hud.update(this.lantern.getEnergy(), this.collectedRunes);
 
@@ -131,7 +133,7 @@ export default class ForestScene extends Phaser.Scene {
       this.ent.x, this.ent.y
     );
 
-    if (dist < 60 && Phaser.Input.Keyboard.JustDown(this.keyE)) {
+    if (dist < 60 && (Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) {
       if (!this.ent.isAwake()) {
         this.ent.wake();
         this.dialog.show('Drevno drvo',

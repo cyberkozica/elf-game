@@ -39,11 +39,10 @@ export default class Player {
   get x() { return this.sprite.x; }
   get y() { return this.sprite.y; }
 
-  update() {
+  update(touch = null) {
     const { left, right, up, down } = this.cursors;
-    const vx = (right.isDown ? 1 : 0) - (left.isDown ? 1 : 0);
-    const vy = (down.isDown ? 1 : 0) - (up.isDown ? 1 : 0);
-
+    const vx = ((right.isDown || touch?.right) ? 1 : 0) - ((left.isDown || touch?.left) ? 1 : 0);
+    const vy = ((down.isDown  || touch?.down)  ? 1 : 0) - ((up.isDown   || touch?.up)   ? 1 : 0);
     this.sprite.setVelocity(vx * PLAYER_SPEED, vy * PLAYER_SPEED);
   }
 }
