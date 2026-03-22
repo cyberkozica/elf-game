@@ -103,6 +103,7 @@ export default class RuinsScene extends SceneBase {
 
     this._entSpokenAfterRune = false;
     this._transitioning = false;
+    this._sceneStartTime = this.time.now;
   }
 
   update(time, delta) {
@@ -118,7 +119,7 @@ export default class RuinsScene extends SceneBase {
   _updateHint() {
     // Show only after 45 seconds AND only when close to the temple wall
     // Players who figure it out quickly never see the hint
-    if (this.time.now < 45000) {
+    if (this.time.now - this._sceneStartTime < 120000) {
       this.hintText.setVisible(false);
       return;
     }

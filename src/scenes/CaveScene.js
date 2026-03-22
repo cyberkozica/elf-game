@@ -69,6 +69,7 @@ export default class CaveScene extends SceneBase {
 
     this._entSpokenAfterRune = false;
     this._transitioning = false;
+    this._sceneStartTime = this.time.now;
   }
 
   update(time, delta) {
@@ -191,7 +192,7 @@ export default class CaveScene extends SceneBase {
   _updateAltar() {
     // Show hint only after 45 seconds AND when close to the altar
     if (this._altarFilled) return;
-    if (this.time.now < 45000) return;
+    if (this.time.now - this._sceneStartTime < 90000) return;
     const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, 240, 160);
     if (d >= 60) return;
     this._altarFilled = true;

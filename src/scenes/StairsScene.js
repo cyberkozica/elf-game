@@ -139,12 +139,10 @@ export default class StairsScene extends SceneBase {
         this._chosen = true;
 
         if (idx === this._correct) {
-          this.dialog.show('', '✦ Prave stube! Runa ᛜ se pojavljuje...');
-          this.time.delayedCall(2000, () => {
-            this.dialog.hide();
-            this.rune.sprite.setVisible(true);
-            this.rune.label.setVisible(true);
-          });
+          this.collectedRunes.push('ᛜ');
+          this.rune.collect();
+          this.dialog.show('', '✦ Prave stube! Pronašao si runu ᛜ. Idi prema istoku.');
+          this.time.delayedCall(2500, () => this.dialog.hide());
         } else {
           this.dialog.show('', '✦ Začarane stube! Šuma te vraća na početak...');
           this.time.delayedCall(2800, () => {
@@ -159,22 +157,11 @@ export default class StairsScene extends SceneBase {
   }
 
   _updateRune() {
-    if (this.rune.isCollected()) return;
-    const d = Phaser.Math.Distance.Between(
-      this.player.x, this.player.y, this.rune.x, this.rune.y
-    );
-    const inLight = d < this.lantern.state.getRadius();
-    this.rune.label.setVisible(this.rune.sprite.visible && inLight);
-    if (inLight && d < 24 && this.rune.sprite.visible) {
-      this.rune.collect();
-      this.collectedRunes.push('ᛜ');
-      this.dialog.show('', '✦ Pronašao si runu ᛜ! Idi prema istoku.');
-      this.time.delayedCall(2500, () => this.dialog.hide());
-    }
+    // Rune is auto-collected when correct stairs are taken — nothing to do here.
   }
 
   _checkExit() {
-    if (this.rune.isCollected() && this.player.x > 460 && !this._transitioning) {
+    if (this.collectedRunes.includes('ᛜ') && this.player.x > 460 && !this._transitioning) {
       this._transitioning = true;
       this.scene.start('Ruins', { runes: this.collectedRunes });
     }
