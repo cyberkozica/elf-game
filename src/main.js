@@ -12,6 +12,10 @@ const config = {
   height: 320,
   pixelArt: true,
   backgroundColor: '#050f05',
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
   scene: [BootScene, MenuScene, ForestScene, LakeScene, RuinsScene, HeartScene, EndScene],
   physics: {
     default: 'arcade',
