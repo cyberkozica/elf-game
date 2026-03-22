@@ -34,17 +34,17 @@ export default class HUD {
     this.energyBar = scene.add.graphics();
     this.container.add(this.energyBar);
 
-    // Rune slotovi
+    // Rune slotovi (5 runa: ᚱ ᚠ ᚢ ᚹ ᚷ)
     this.runeTexts = [];
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
       const slotBg = scene.add.graphics();
       slotBg.lineStyle(1, 0x2a2a4a);
-      slotBg.strokeRect(346 + i * 22, 9, 18, 18);
+      slotBg.strokeRect(344 + i * 20, 9, 18, 18);
       slotBg.fillStyle(0x1a1a2a);
-      slotBg.fillRect(346 + i * 22, 9, 18, 18);
+      slotBg.fillRect(344 + i * 20, 9, 18, 18);
       this.container.add(slotBg);
 
-      const t = scene.add.text(355 + i * 22, 18, '', {
+      const t = scene.add.text(353 + i * 20, 18, '', {
         fontSize: '11px', color: '#8a8aee', fontFamily: 'serif'
       }).setOrigin(0.5);
       this.container.add(t);
@@ -59,7 +59,7 @@ export default class HUD {
     this.energyBar.fillRect(28, 19, lanternEnergy, 6);
 
     // Ažuriraj rune slotove
-    const symbols = ['ᚱ', 'ᚠ', 'ᚹ', 'ᚷ'];
+    const symbols = ['ᚱ', 'ᚠ', 'ᚢ', 'ᚹ', 'ᚷ'];
     symbols.forEach((sym, i) => {
       this.runeTexts[i].setText(collectedRunes.includes(sym) ? sym : '');
     });

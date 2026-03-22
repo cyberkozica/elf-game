@@ -23,9 +23,9 @@ export default class HeartScene extends SceneBase {
     this.portalRing.lineStyle(2, 0x2a4a2a);
     this.portalRing.strokeCircle(240, 160, 40);
 
-    // 4 runes on the ring
-    const ringRunes = ['ᚱ', 'ᚠ', 'ᚹ', 'ᚷ'];
-    const ringAngles = [0, 90, 180, 270];
+    // 5 runes on the ring
+    const ringRunes = ['ᚱ', 'ᚠ', 'ᚢ', 'ᚹ', 'ᚷ'];
+    const ringAngles = [0, 72, 144, 216, 288];
     this.ringRuneTexts = ringAngles.map((angle, i) => {
       const rad = (angle - 90) * Math.PI / 180;
       const rx = 240 + Math.cos(rad) * 40;
@@ -121,7 +121,7 @@ export default class HeartScene extends SceneBase {
 
   _updateRingGlow() {
     // Highlight ring runes as they are collected
-    const allRunes = ['ᚱ', 'ᚠ', 'ᚹ', 'ᚷ'];
+    const allRunes = ['ᚱ', 'ᚠ', 'ᚢ', 'ᚹ', 'ᚷ'];
     this.ringRuneTexts.forEach((t, i) => {
       t.setColor(this.collectedRunes.includes(allRunes[i]) ? '#c8c840' : '#2a4a2a');
     });
@@ -129,7 +129,7 @@ export default class HeartScene extends SceneBase {
 
   _updatePortal() {
     if (this.portalActivated) return;
-    const allCollected = ['ᚱ', 'ᚠ', 'ᚹ', 'ᚷ'].every(r => this.collectedRunes.includes(r));
+    const allCollected = ['ᚱ', 'ᚠ', 'ᚢ', 'ᚹ', 'ᚷ'].every(r => this.collectedRunes.includes(r));
     if (!allCollected) return;
 
     // Pulse ring when all runes collected

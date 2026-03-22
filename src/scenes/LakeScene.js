@@ -130,7 +130,7 @@ export default class LakeScene extends SceneBase {
         this.entSpoke = true;
         this.dialog.show('Drevno drvo',
           this.rune.isCollected()
-            ? '"Dobro. Ruševine te čekaju na istoku. Tamo su stari stupovi koji pamte red."'
+            ? '"Dobro. Špilja kristala čeka te na istoku. Pazi na redoslijed svjetla."'
             : '"Prođi mostom koji vidiš u odrazu vode, ne u stvarnosti."');
       } else {
         this.dialog.hide();
@@ -141,7 +141,7 @@ export default class LakeScene extends SceneBase {
   _checkExit() {
     if (this.rune.isCollected() && this.player.x > 460 && !this._transitioning) {
       this._transitioning = true;
-      this.scene.start('Ruins', { runes: this.collectedRunes });
+      this.scene.start('Cave', { runes: this.collectedRunes });
     }
   }
 }

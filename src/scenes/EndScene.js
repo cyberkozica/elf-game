@@ -26,9 +26,9 @@ export default class EndScene extends Phaser.Scene {
 
     // Runes appear one by one, then turn gold
     // Note: Phaser 3 cannot tween Text color — use delayedCall + setColor()
-    const runeSymbols = ['ᚱ', 'ᚠ', 'ᚹ', 'ᚷ'];
+    const runeSymbols = ['ᚱ', 'ᚠ', 'ᚢ', 'ᚹ', 'ᚷ'];
     runeSymbols.forEach((sym, i) => {
-      const rt = this.add.text(180 + i * 35, 100, sym, {
+      const rt = this.add.text(162 + i * 35, 100, sym, {
         fontSize: '20px', fontFamily: 'serif', color: '#2a4a2a'
       }).setOrigin(0.5).setAlpha(0);
 
