@@ -56,6 +56,7 @@ export default class HeartScene extends SceneBase {
     this.lastRune.label.setVisible(false);
     this.lastRune.sprite.setVisible(false);
 
+    this._runeRevealed = false;
     this._transitioning = false;
   }
 
@@ -74,20 +75,25 @@ export default class HeartScene extends SceneBase {
     );
     const inLight = dist < this.lantern.state.getRadius();
 
-    // Ent wakes when light touches it
+    // Ent wakes when light first touches it — but rune stays hidden until E is pressed
     if (inLight && !this.ent.isAwake()) {
       this.ent.wake();
       this.dialog.show('Drevno drvo',
-        '"Ti si stigao... Osjećam svjetlo tvoje svjetiljke. Moje sjeme — runa ᚷ — tvoje je."');
-      this.time.delayedCall(3000, () => {
-        this.dialog.hide();
-        this.lastRune.sprite.setVisible(true);
-        this.lastRune.label.setVisible(true);
-      });
+        '"Ti si stigao... Osjećam svjetlo tvoje svjetiljke. Moje sjeme — runa ᚷ — tvoje je. Priđi bliže."');
+      this.time.delayedCall(3500, () => this.dialog.hide());
     }
 
     if (dist < 60 && Phaser.Input.Keyboard.JustDown(this.keyE)) {
-      if (!this.dialog.visible) {
+      if (!this.ent.isAwake()) return;
+
+      if (!this._runeRevealed) {
+        // First E press near awake ent — reveal the rune
+        this._runeRevealed = true;
+        this.lastRune.sprite.setVisible(true);
+        this.lastRune.label.setVisible(true);
+        this.dialog.show('', '✦ Uzmi runu ᚷ iz srca enta!');
+        this.time.delayedCall(2000, () => this.dialog.hide());
+      } else if (!this.dialog.visible) {
         this.dialog.show('Drevno drvo',
           this.lastRune.isCollected()
             ? '"Stani na runski krug i pritisni E. Portal te čeka."'
@@ -99,13 +105,13 @@ export default class HeartScene extends SceneBase {
   }
 
   _updateLastRune() {
-    if (this.lastRune.isCollected()) return;
+    if (this.lastRune.isCollected() || !this._runeRevealed) return;
     const d = Phaser.Math.Distance.Between(
       this.player.x, this.player.y, this.lastRune.x, this.lastRune.y
     );
     const inLight = d < this.lantern.state.getRadius();
-    this.lastRune.label.setVisible(inLight && this.ent.isAwake());
-    if (inLight && d < 24 && this.ent.isAwake()) {
+    this.lastRune.label.setVisible(inLight);
+    if (inLight && d < 24) {
       this.lastRune.collect();
       this.collectedRunes.push('ᚷ');
       this.dialog.show('', '✦ Pronašao si posljednju runu ᚷ!');

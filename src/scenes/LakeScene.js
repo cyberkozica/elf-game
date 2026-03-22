@@ -3,59 +3,63 @@ import SceneBase from '../objects/SceneBase.js';
 import Ent from '../objects/Ent.js';
 import Rune from '../objects/Rune.js';
 
+// Layout overview:
+//   Lake: x=80-400, y=75-225
+//   Player starts: x=40, y=210 (bottom of left shore)
+//   Bridge corridor: y=85-105 (center y=95)
+//   Left shore: x=0-80, full height — walk UP to find the bridge entrance
+//   Right shore: x=400-480, y=85-105 (only at bridge level)
+//   Player body 14×14 at y=95: top=88, bottom=102 → fits corridor 85-105
+
 export default class LakeScene extends SceneBase {
   constructor() { super('Lake'); }
 
   create() {
     this._baseCreate('MAGIČNO JEZERO', 0x03080f);
 
-    this.player.sprite.setPosition(40, 120);
-    // Body 14×14 centered in corridor. Sprite is 24×42, origin center.
-    // Sprite top = 120-21 = 99. Body top = 99+14 = 113. Body bottom = 113+14 = 127.
-    // wTop ends y=108, wBot starts y=132 → 24px gap, body fits easily.
+    // Start at bottom of left shore — player must explore up to find the bridge
+    this.player.sprite.setPosition(40, 210);
     this.player.sprite.body.setSize(14, 14).setOffset(5, 14);
 
-    // Lake (depth 1, player depth 5 from _baseCreate)
+    // Lake body (depth 1)
     const lake = this.add.graphics().setDepth(1);
     lake.fillStyle(0x050a1a);
-    lake.fillRect(80, 80, 320, 140);
+    lake.fillRect(80, 75, 320, 150);   // x=80-400, y=75-225
     lake.lineStyle(1, 0x0a1a3a);
-    lake.strokeRect(80, 80, 320, 140);
+    lake.strokeRect(80, 75, 320, 150);
 
-    // Visible shores (left and right of lake only — no strip over water)
+    // Left shore — full height strip, clearly visible as a walkable path
     const shores = this.add.graphics().setDepth(2);
     shores.fillStyle(0x5a4a2a);
-    shores.fillRect(0, 112, 80, 16);    // left shore x=0-80
-    shores.fillRect(400, 112, 80, 16);  // right shore x=400-480
+    shores.fillRect(0, 70, 80, 160);   // left shore x=0-80, y=70-230
+    shores.fillRect(400, 85, 80, 20);  // right shore x=400-480, y=85-105
 
-    // Bridge reflection — horizontal lighter strip in water hints at the path
-    // Visible at all times (it's a reflection, not the bridge itself)
+    // Bridge reflection — horizontal hint visible across the lake at bridge level
     const ref = this.add.graphics().setDepth(2);
-    ref.fillStyle(0x1a3a5a, 0.7);
-    ref.fillRect(80, 116, 320, 8);   // main reflection strip at bridge level
+    ref.fillStyle(0x1a3a5a, 0.8);
+    ref.fillRect(80, 91, 320, 8);   // main strip at y=91-99
     ref.fillStyle(0x2a4a6a, 0.4);
-    ref.fillRect(80, 112, 320, 4);   // soft edge above
-    ref.fillRect(80, 124, 320, 4);   // soft edge below
+    ref.fillRect(80, 87, 320, 4);   // soft edge above
+    ref.fillRect(80, 99, 320, 4);   // soft edge below
 
     // WATER PHYSICS
-    // Player body: top y=113, bottom y=127. Corridor must contain y=113-127.
+    // Player body at y=95: top=88, bottom=102. Corridor y=85-105 (20px gap).
     this.waterGroup = this.physics.add.staticGroup();
-    const wTop = this.waterGroup.create(240, 94, null);
-    wTop.setVisible(false).setSize(320, 28).refreshBody();  // y=80-108
-    const wBot = this.waterGroup.create(240, 176, null);
-    wBot.setVisible(false).setSize(320, 88).refreshBody();  // y=132-220
+    const wTop = this.waterGroup.create(240, 80, null);
+    wTop.setVisible(false).setSize(320, 10).refreshBody();   // y=75-85
+    const wBot = this.waterGroup.create(240, 165, null);
+    wBot.setVisible(false).setSize(320, 120).refreshBody();  // y=105-225
     this.physics.add.collider(this.player.sprite, this.waterGroup);
 
-    // BARRIER WALLS — full-width, no way around lake vertically
+    // Full-width barrier walls — prevent going above/below the scene
     this.barrierGroup = this.physics.add.staticGroup();
-    const bTop = this.barrierGroup.create(240, 70, null);
-    bTop.setVisible(false).setSize(480, 20).refreshBody();  // y=60-80
-    const bBot = this.barrierGroup.create(240, 230, null);
-    bBot.setVisible(false).setSize(480, 20).refreshBody();  // y=220-240
+    const bTop = this.barrierGroup.create(240, 62, null);
+    bTop.setVisible(false).setSize(480, 14).refreshBody();   // y=55-69
+    const bBot = this.barrierGroup.create(240, 238, null);
+    bBot.setVisible(false).setSize(480, 14).refreshBody();   // y=231-245
     this.physics.add.collider(this.player.sprite, this.barrierGroup);
 
-    // BRIDGE TILES — appear only when very close (d<60), not by full lantern radius
-    // This preserves the invisible bridge illusion even with a bright lantern
+    // BRIDGE TILES — appear only within 60px of player
     this.bridgeTiles = [];
     for (let bx = 80; bx < 400; bx += 20) {
       const tile = this.add.graphics().setDepth(3);
@@ -64,23 +68,24 @@ export default class LakeScene extends SceneBase {
       tile.fillStyle(0x4a3a1a);
       tile.fillRect(1, 15, 18, 1);
       tile.x = bx;
-      tile.y = 112;
+      tile.y = 87;
       tile.setVisible(false);
       this.bridgeTiles.push({ tile, bx });
     }
 
     this._createTrees([
       [30, 50],  [450, 50],
-      [30, 265], [450, 265],
-      [30, 165], [450, 165],
+      [450, 155], [450, 260],
+      [30, 260],
     ]);
 
-    this._createMushrooms([[50, 120], [440, 120]]);
+    // Mushroom on left shore (middle) — reward for walking up
+    this._createMushrooms([[40, 145], [435, 95]]);
 
-    this.ent = new Ent(this, 420, 120);
+    this.ent = new Ent(this, 430, 95);
     this.ent.wake();
 
-    this.rune = new Rune(this, 300, 120, 'ᚠ');
+    this.rune = new Rune(this, 290, 95, 'ᚠ');
     this.rune.label.setVisible(false);
 
     this.entSpoke = false;
@@ -97,9 +102,8 @@ export default class LakeScene extends SceneBase {
   }
 
   _updateBridge() {
-    // Show only tiles within 60px — player discovers bridge step by step
     this.bridgeTiles.forEach(({ tile, bx }) => {
-      const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, bx + 10, 120);
+      const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, bx + 10, 95);
       tile.setVisible(d < 60);
     });
   }

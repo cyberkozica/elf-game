@@ -113,7 +113,12 @@ export default class RuinsScene extends SceneBase {
   }
 
   _updateHint() {
-    // Only visible when very close to the temple wall — player must walk up to it
+    // Show only after 45 seconds AND only when close to the temple wall
+    // Players who figure it out quickly never see the hint
+    if (this.time.now < 45000) {
+      this.hintText.setVisible(false);
+      return;
+    }
     const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, 240, 45);
     this.hintText.setVisible(d < 60);
   }
