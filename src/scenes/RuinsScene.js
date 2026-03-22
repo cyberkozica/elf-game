@@ -44,22 +44,24 @@ export default class RuinsScene extends SceneBase {
     }
 
     // Randomize correct sequence each session
-    const allSymbols = ['ᚷ', 'ᚱ', 'ᚹ', 'ᚠ'];
+    const allSymbols = ['ᚷ', 'ᚱ', 'ᚹ', 'ᚠ', 'ᛩ', 'ᛜ'];
     const correctOrder = Phaser.Utils.Array.Shuffle([...allSymbols]);
     this.puzzle = new PuzzleState(correctOrder);
 
     // Temple wall with hint — shows randomized order, only visible in lantern light
-    this.add.graphics().setDepth(1).fillStyle(0x1a1510).fillRect(160, 30, 160, 30);
+    this.add.graphics().setDepth(1).fillStyle(0x1a1510).fillRect(130, 30, 220, 30);
     this.hintText = this.add.text(240, 45, correctOrder.join(' → '), {
-      fontSize: '11px', color: '#5a4a2a', fontFamily: 'serif'
+      fontSize: '10px', color: '#5a4a2a', fontFamily: 'serif'
     }).setOrigin(0.5).setDepth(5).setVisible(false);
 
-    // 4 rune pillars — fixed positions, fixed symbols
+    // 6 rune pillars — 3×2 grid
     const pillarData = [
-      { x: 140, y: 130, sym: 'ᚷ' },
-      { x: 200, y: 180, sym: 'ᚱ' },
-      { x: 280, y: 130, sym: 'ᚹ' },
-      { x: 340, y: 180, sym: 'ᚠ' },
+      { x: 150, y: 110, sym: 'ᚷ' },
+      { x: 240, y: 110, sym: 'ᚱ' },
+      { x: 330, y: 110, sym: 'ᚹ' },
+      { x: 150, y: 190, sym: 'ᚠ' },
+      { x: 240, y: 190, sym: 'ᛩ' },
+      { x: 330, y: 190, sym: 'ᛜ' },
     ];
     this.pillars = pillarData.map(({ x, y, sym }) => {
       const g = this.add.graphics().setDepth(2);
