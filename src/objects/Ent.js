@@ -6,12 +6,12 @@ export default class Ent {
     this.x = x;
     this.y = y;
     this._bodyColor = null;  // null = use default wood color
-    this._material = options.material ?? 'wood';
+    this._material = options.material ?? 'wood';  // metadata for caller (StatueScene), not used by _draw()
 
     this.graphics = scene.add.graphics();
     this._draw();
 
-    // Separate graphics layer for hint glow (depth+1 over body)
+    // Separate graphics layer for hint glow (renders above body because created after it)
     this.glowGraphics = scene.add.graphics();
 
     // Zona za interakciju

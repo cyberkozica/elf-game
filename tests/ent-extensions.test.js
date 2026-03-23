@@ -20,7 +20,7 @@ const mockScene = {
   physics: { add: { existing: jest.fn() } },
 };
 
-test('_bodyColor är null by default', () => {
+test('_bodyColor je null po defaultu', () => {
   const e = new Ent(mockScene, 100, 100);
   expect(e._bodyColor).toBeNull();
 });
