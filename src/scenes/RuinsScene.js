@@ -28,6 +28,7 @@ export default class RuinsScene extends SceneBase {
 
   create() {
     this._baseCreate('DREVNE RUŠEVINE', 0x080508);
+    this._fromStatue = this.sys.settings.data?.fromStatue ?? false;
 
     this.player.sprite.setPosition(40, 160);
 
@@ -191,11 +192,14 @@ export default class RuinsScene extends SceneBase {
     const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.ent.x, this.ent.y);
     if (dist < 60 && (Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) {
       if (!this.ent.isAwake()) {
-        this.dialog.show('Drevno drvo', '"...zzz... stari stupovi... pamte red... zzz..."');
+        const sleepMsg = this._fromStatue
+          ? '"...zzz... stari stupovi... pamte red... zzz..."'
+          : '"...zzz... stari stupovi... pamte red... Moj prijatelj u dvorali iza voli kipove. Ali pazite — nije sve što stoji, živo... zzz..."';
+        this.dialog.show('Drevno drvo', sleepMsg);
         this.time.delayedCall(2500, () => this.dialog.hide());
       } else if (!this.dialog.visible) {
         const msg = this.rune.isCollected()
-          ? '"Srce šume te čeka na istoku."'
+          ? '"Dvorana kipova te čeka na istoku."'
           : '"Skupi runu i idi prema istoku."';
         this.dialog.show('Drevno drvo', msg);
         if (this.rune.isCollected()) this._entSpokenAfterRune = true;
@@ -208,7 +212,7 @@ export default class RuinsScene extends SceneBase {
   _checkExit() {
     if (this.rune.isCollected() && this._entSpokenAfterRune && this.player.x > 460 && !this._transitioning) {
       this._transitioning = true;
-      this.scene.start('Heart', { runes: this.collectedRunes });
+      this.scene.start('Statue', { runes: this.collectedRunes });
     }
   }
 }
