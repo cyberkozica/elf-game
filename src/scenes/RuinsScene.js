@@ -194,7 +194,7 @@ export default class RuinsScene extends SceneBase {
       if (!this.ent.isAwake()) {
         const sleepMsg = this._fromStatue
           ? '"...zzz... stari stupovi... pamte red... zzz..."'
-          : '"...zzz... stari stupovi... pamte red... Moj prijatelj u dvorali iza voli kipove. Ali pazite — nije sve što stoji, živo... zzz..."';
+          : '"...zzz... stari stupovi... pamte red... Moj prijatelj u dvorani iza voli kipove. Ali pazite — nije sve što stoji, živo... zzz..."';
         this.dialog.show('Drevno drvo', sleepMsg);
         this.time.delayedCall(2500, () => this.dialog.hide());
       } else if (!this.dialog.visible) {

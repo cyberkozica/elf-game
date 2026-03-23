@@ -139,6 +139,8 @@ export default class StatueScene extends SceneBase {
     // Show rune near the real Ent
     this.rune.sprite.setPosition(entData.x, entData.y + 20);
     this.rune.label.setPosition(entData.x, entData.y + 20);
+    this.rune.x = entData.x;
+    this.rune.y = entData.y + 20;
     this.rune.sprite.setVisible(true);
     this.rune.label.setVisible(true);
     this._openDoor();
@@ -157,7 +159,7 @@ export default class StatueScene extends SceneBase {
       });
     });
     // Reveal statue materials after shake
-    this.time.delayedCall(300, () => {
+    this.time.delayedCall(500, () => {
       const matColors = { bronze: 0xcd7f32, silver: 0xc0c0c0, gold: 0xffd700 };
       this.ents.forEach(entData => {
         if (!entData.isReal) {
