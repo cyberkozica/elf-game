@@ -77,7 +77,12 @@ export default class StatueScene extends SceneBase {
     this._sceneStartTime = this.time.now;
 
     if (this._alreadySolved) {
+      this._revealed = true;
       this._openDoor();
+      this.rune.sprite.setPosition(240, 160);
+      this.rune.label.setPosition(240, 160);
+      this.rune.sprite.setVisible(true);
+      this.rune.label.setVisible(true);
     }
   }
 
@@ -114,6 +119,7 @@ export default class StatueScene extends SceneBase {
   _updateEnts() {
     if (this._revealed || this._transitioning) return;
     this.ents.forEach((entData) => {
+      if (this._revealed) return;
       const d = Phaser.Math.Distance.Between(
         this.player.x, this.player.y, entData.x, entData.y
       );
