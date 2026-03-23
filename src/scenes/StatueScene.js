@@ -77,7 +77,15 @@ export default class StatueScene extends SceneBase {
     this._transitioning = false;
     this._revealed = false;
     this._hintActive = false;
-    this._sceneStartTime = this.time.now;
+
+    // Hint se aktivira tek nakon 60 sekundi (delayedCall koristi scene clock, ne globalnu granu)
+    this.time.delayedCall(60000, () => {
+      if (!this._revealed) {
+        this._hintActive = true;
+        const realEntData = this.ents.find(e => e.isReal);
+        if (realEntData) realEntData.ent.setHintGlow(true);
+      }
+    });
 
     if (this._alreadySolved) {
       this._revealed = true;
@@ -92,7 +100,6 @@ export default class StatueScene extends SceneBase {
   update(time, delta) {
     this._baseUpdate(delta);
     this._updateMushrooms();
-    this._updateHint();
     this._updateEnts();
     this._updateRune();
     this._checkExit();
@@ -109,14 +116,6 @@ export default class StatueScene extends SceneBase {
   _openDoor() {
     this.doorOpen = true;
     this._drawDoor(true);
-  }
-
-  _updateHint() {
-    if (this._hintActive || this._revealed) return;
-    if (this.time.now - this._sceneStartTime < 60000) return;
-    this._hintActive = true;
-    const realEntData = this.ents.find(e => e.isReal);
-    if (realEntData) realEntData.ent.setHintGlow(true);
   }
 
   _updateEnts() {
