@@ -77,6 +77,7 @@ export default class StatueScene extends SceneBase {
     this._transitioning = false;
     this._revealed = false;
     this._hintActive = false;
+    this._runeCollectable = false;
 
     // Hint se aktivira tek nakon 60 sekundi (delayedCall koristi scene clock, ne globalnu granu)
     this.time.delayedCall(60000, () => {
@@ -89,6 +90,7 @@ export default class StatueScene extends SceneBase {
 
     if (this._alreadySolved) {
       this._revealed = true;
+      this._runeCollectable = true;
       this._openDoor();
       this.rune.sprite.setPosition(240, 160);
       this.rune.label.setPosition(240, 160);
@@ -146,6 +148,8 @@ export default class StatueScene extends SceneBase {
     this.rune.sprite.setVisible(true);
     this.rune.label.setVisible(true);
     this._openDoor();
+    // Kratki delay da igrač ne skupi runu automatski dok stoji uz Enta
+    this.time.delayedCall(800, () => { this._runeCollectable = true; });
   }
 
   _solveWrong() {
@@ -180,7 +184,7 @@ export default class StatueScene extends SceneBase {
   }
 
   _updateRune() {
-    if (this.rune.isCollected() || !this.doorOpen || !this._revealed) return;
+    if (this.rune.isCollected() || !this.doorOpen || !this._revealed || !this._runeCollectable) return;
     const d = Phaser.Math.Distance.Between(
       this.player.x, this.player.y, this.rune.x, this.rune.y
     );
