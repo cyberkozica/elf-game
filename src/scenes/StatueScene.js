@@ -63,7 +63,10 @@ export default class StatueScene extends SceneBase {
     this.ents = positions.map(([ex, ey], i) => {
       const isReal = this.statueState.isReal(i);
       const mat = isReal ? 'wood' : shuffledMaterials[matIdx++];
-      return { ent: new Ent(this, ex, ey, { material: mat }), x: ex, y: ey, isReal, mat };
+      const ent = new Ent(this, ex, ey, { material: mat });
+      ent.graphics.setDepth(3);
+      ent.glowGraphics.setDepth(4);
+      return { ent, x: ex, y: ey, isReal, mat };
     });
 
     // Rune ᛈ — hidden until real Ent is chosen
