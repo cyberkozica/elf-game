@@ -19,8 +19,6 @@ export default class Rune {
     this.sprite = scene.add.graphics();
     this._draw(x, y);
 
-    this.hitArea = scene.add.zone(x, y, 24, 24);
-    scene.physics.add.existing(this.hitArea, true);
     this.x = x;
     this.y = y;
   }
@@ -41,7 +39,6 @@ export default class Rune {
     this.state.collect();
     this.sprite.destroy();
     this.label.destroy();
-    this.hitArea.destroy();
   }
 
   isCollected() {

@@ -163,6 +163,7 @@ export default class LakeScene extends SceneBase {
     }
 
     // ── Upper wooden bridge tiles (island → right shore, depth 3) ──
+    // tile.y=148 so top of tile is at y=148, aligns with player feet at y=151
     this.upperBridgeTiles = [];
     for (let bx = 300; bx < 400; bx += 20) {
       const tile = this.add.graphics().setDepth(3);
@@ -171,7 +172,7 @@ export default class LakeScene extends SceneBase {
       tile.fillStyle(0x4a3a1a);
       tile.fillRect(1, 15, 18, 1);
       tile.x = bx;
-      tile.y = 122;
+      tile.y = 148;
       tile.setVisible(false);
       this.upperBridgeTiles.push({ tile, bx });
     }
