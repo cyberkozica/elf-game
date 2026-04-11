@@ -189,6 +189,7 @@ export default class LakeScene extends SceneBase {
 
     // ── Ent — on right shore ───────────────────────────────
     this.ent = new Ent(this, 430, 115);
+    this.ent.graphics.setDepth(3);
 
     // ── Rune ᚠ — on upper bridge path ─────────────────────
     this.rune = new Rune(this, 350, 130, 'ᚠ');
