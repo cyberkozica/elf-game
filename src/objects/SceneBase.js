@@ -74,6 +74,25 @@ export default class SceneBase extends Phaser.Scene {
     });
   }
 
+  // Floating BOING! + optional message — reusable across scenes
+  _showBoing(x, y, label = 'BOING!', msg = null) {
+    const boing = this.add.text(x, y - 20, label, {
+      fontSize: '14px', color: '#ffcc00', fontStyle: 'bold'
+    }).setOrigin(0.5).setDepth(15);
+    this.tweens.add({
+      targets: boing, alpha: 0, y: boing.y - 15,
+      duration: 1200, onComplete: () => boing.destroy()
+    });
+    if (msg) {
+      const t = this.add.text(x, y + 15, msg, {
+        fontSize: '11px', color: '#ff4400', fontStyle: 'bold'
+      }).setOrigin(0.5).setDepth(15);
+      this.tweens.add({
+        targets: t, alpha: 0, duration: 1500, onComplete: () => t.destroy()
+      });
+    }
+  }
+
   // Call from subclass update() to check mushroom pickups
   _updateMushrooms() {
     this.lightSources.forEach(src => {

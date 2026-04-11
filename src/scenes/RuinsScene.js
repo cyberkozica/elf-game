@@ -148,6 +148,7 @@ export default class RuinsScene extends SceneBase {
           // Wrong — flash red
           pillar.label.setColor('#aa2222');
           this.time.delayedCall(300, () => pillar.label.setColor('#5a5a3a'));
+          this._showBoing(pillar.x, pillar.y, 'BOING!', 'Pogrešan red!');
           this.dialog.show('', '✦ Krivi redoslijed. Pokušaj ponovo.');
           this.time.delayedCall(1500, () => this.dialog.hide());
           this.pillars.forEach(p => p.label.setColor('#5a5a3a'));

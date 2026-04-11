@@ -130,7 +130,16 @@ export default class HeartScene extends SceneBase {
   _updatePortal() {
     if (this.portalActivated) return;
     const allCollected = ['ᚱ', 'ᚠ', 'ᛩ', 'ᛜ', 'ᚹ', 'ᛈ', 'ᚷ'].every(r => this.collectedRunes.includes(r));
-    if (!allCollected) return;
+    const distToCenter = Phaser.Math.Distance.Between(this.player.x, this.player.y, 240, 160);
+    const ePressed = Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown();
+
+    if (!allCollected) {
+      // BOING if player tries to activate portal without all runes
+      if (distToCenter < 40 && ePressed) {
+        this._showBoing(240, 160, 'BOING!', 'Nedostaje runa!');
+      }
+      return;
+    }
 
     // Pulse ring when all runes collected
     const t = this.time.now / 500;
@@ -138,9 +147,7 @@ export default class HeartScene extends SceneBase {
     this.portalRing.lineStyle(2, 0x3a6a3a, 0.7 + 0.3 * Math.sin(t));
     this.portalRing.strokeCircle(240, 160, 40);
 
-    // Activate portal when player stands on ring and presses E
-    const distToCenter = Phaser.Math.Distance.Between(this.player.x, this.player.y, 240, 160);
-    if (distToCenter < 40 && (Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) {
+    if (distToCenter < 40 && ePressed) {
       this._activatePortal();
     }
   }

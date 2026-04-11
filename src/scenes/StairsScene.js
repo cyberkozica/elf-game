@@ -144,6 +144,7 @@ export default class StairsScene extends SceneBase {
           this.dialog.show('', '✦ Prave stube! Pronašao si runu ᛜ. Idi prema istoku.');
           this.time.delayedCall(2500, () => this.dialog.hide());
         } else {
+          this._showBoing(this.player.x, this.player.y, 'BOING!', 'Krivi put!');
           this.dialog.show('', '✦ Začarane stube! Šuma te vraća na početak...');
           this.time.delayedCall(2800, () => {
             if (!this._transitioning) {

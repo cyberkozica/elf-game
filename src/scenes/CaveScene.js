@@ -243,6 +243,7 @@ export default class CaveScene extends SceneBase {
         } else {
           // Wrong — reset all
           this._resetCrystals();
+          this._showBoing(crystal.x, crystal.y, 'BOING!', 'Nije to!');
           this.dialog.show('', '✦ Krivi redoslijed. Sve se resetiralo.');
           this.time.delayedCall(2000, () => this.dialog.hide());
         }
