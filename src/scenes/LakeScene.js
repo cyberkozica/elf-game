@@ -89,13 +89,14 @@ export default class LakeScene extends SceneBase {
     const w3 = this.waterGroup.create(260, 110, null);
     w3.setVisible(false).setSize(80, 10).refreshBody();
 
-    // W4: right of island, above upper bridge (x=300-400, y=105-120)
-    const w4 = this.waterGroup.create(350, 112, null);
-    w4.setVisible(false).setSize(100, 15).refreshBody();
+    // W4: right of island, above upper bridge (x=300-400, y=105-115)
+    const w4 = this.waterGroup.create(350, 110, null);
+    w4.setVisible(false).setSize(100, 10).refreshBody();
 
-    // W5: right of island, below upper bridge (x=300-400, y=140-205)
-    const w5 = this.waterGroup.create(350, 172, null);
-    w5.setVisible(false).setSize(100, 65).refreshBody();
+    // W5: right of island, below upper bridge (x=300-400, y=155-205)
+    // Corridor is y=115-155 (40px) — gives 13px clearance for 14px player body
+    const w5 = this.waterGroup.create(350, 180, null);
+    w5.setVisible(false).setSize(100, 50).refreshBody();
 
     // W6: bottom of lake (y=205-225)
     const w6 = this.waterGroup.create(240, 215, null);
