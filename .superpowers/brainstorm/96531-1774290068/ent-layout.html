@@ -1,0 +1,111 @@
+<h2>Raspored Entova u Dvorani kipova</h2>
+<p class="subtitle">Viewport je 480×320 px. Igrač ulazi s lijeve strane. Gdje su 4 Enta?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#1a1a2e;width:100%;height:140px;position:relative;border:2px solid #444;font-family:monospace;overflow:hidden;">
+        <!-- floor -->
+        <div style="position:absolute;bottom:0;width:100%;height:30px;background:#2d2d44;"></div>
+        <!-- pillars -->
+        <div style="position:absolute;bottom:30px;left:8%;width:6px;height:50px;background:#555;"></div>
+        <div style="position:absolute;bottom:30px;left:8%;width:6px;height:40px;background:#666;top:20px;"></div>
+        <div style="position:absolute;bottom:30px;right:8%;width:6px;height:50px;background:#555;"></div>
+        <!-- 4 Ents in a row -->
+        <div style="position:absolute;bottom:28px;left:30%;text-align:center;">
+          <div style="width:18px;height:28px;background:#4a3728;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+          <div style="font-size:9px;color:#aaa;margin-top:2px;">🟤</div>
+        </div>
+        <div style="position:absolute;bottom:28px;left:44%;text-align:center;">
+          <div style="width:18px;height:28px;background:#b87333;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+          <div style="font-size:9px;color:#aaa;margin-top:2px;">🟠</div>
+        </div>
+        <div style="position:absolute;bottom:28px;left:58%;text-align:center;">
+          <div style="width:18px;height:28px;background:#aaa;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+          <div style="font-size:9px;color:#aaa;margin-top:2px;">⚪</div>
+        </div>
+        <div style="position:absolute;bottom:28px;left:72%;text-align:center;">
+          <div style="width:18px;height:28px;background:#ffd700;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+          <div style="font-size:9px;color:#aaa;margin-top:2px;">🟡</div>
+        </div>
+        <!-- player -->
+        <div style="position:absolute;bottom:30px;left:12px;width:10px;height:16px;background:#4caf50;border-radius:2px;"></div>
+        <div style="position:absolute;bottom:28px;left:5px;font-size:9px;color:#8f8;">ulaz</div>
+        <!-- exit arrow -->
+        <div style="position:absolute;bottom:36px;right:10px;font-size:14px;color:#666;">→</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Red u nizu</h3>
+      <p>Svi Entovi u ravnoj liniji kroz dvoranu. Jednostavno, klasično.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#1a1a2e;width:100%;height:140px;position:relative;border:2px solid #444;font-family:monospace;overflow:hidden;">
+        <div style="position:absolute;bottom:0;width:100%;height:30px;background:#2d2d44;"></div>
+        <!-- 2x2 grid -->
+        <div style="position:absolute;bottom:65px;left:35%;text-align:center;">
+          <div style="width:18px;height:28px;background:#4a3728;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+        </div>
+        <div style="position:absolute;bottom:65px;left:55%;text-align:center;">
+          <div style="width:18px;height:28px;background:#b87333;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+        </div>
+        <div style="position:absolute;bottom:28px;left:35%;text-align:center;">
+          <div style="width:18px;height:28px;background:#aaa;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+        </div>
+        <div style="position:absolute;bottom:28px;left:55%;text-align:center;">
+          <div style="width:18px;height:28px;background:#ffd700;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+        </div>
+        <!-- player -->
+        <div style="position:absolute;bottom:30px;left:12px;width:10px;height:16px;background:#4caf50;border-radius:2px;"></div>
+        <div style="position:absolute;bottom:28px;left:5px;font-size:9px;color:#8f8;">ulaz</div>
+        <div style="position:absolute;bottom:36px;right:10px;font-size:14px;color:#666;">→</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Mreža 2×2</h3>
+      <p>Dva Enta naprijed, dva iza. Treba kružiti između njih.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#1a1a2e;width:100%;height:140px;position:relative;border:2px solid #444;font-family:monospace;overflow:hidden;">
+        <div style="position:absolute;bottom:0;width:100%;height:30px;background:#2d2d44;"></div>
+        <!-- semicircle / scattered around center altar -->
+        <div style="position:absolute;top:15px;left:50%;transform:translateX(-50%);width:20px;height:20px;background:#333;border:1px solid #ffd700;border-radius:50%;text-align:center;line-height:20px;font-size:8px;color:#ffd700;">⬡</div>
+        <!-- top left -->
+        <div style="position:absolute;top:48px;left:27%;text-align:center;">
+          <div style="width:18px;height:28px;background:#4a3728;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+        </div>
+        <!-- top right -->
+        <div style="position:absolute;top:48px;left:57%;text-align:center;">
+          <div style="width:18px;height:28px;background:#b87333;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+        </div>
+        <!-- bottom left -->
+        <div style="position:absolute;bottom:30px;left:27%;text-align:center;">
+          <div style="width:18px;height:28px;background:#aaa;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+        </div>
+        <!-- bottom right -->
+        <div style="position:absolute;bottom:30px;left:57%;text-align:center;">
+          <div style="width:18px;height:28px;background:#ffd700;margin:0 auto;border-radius:3px 3px 0 0;"></div>
+        </div>
+        <!-- player -->
+        <div style="position:absolute;bottom:30px;left:12px;width:10px;height:16px;background:#4caf50;border-radius:2px;"></div>
+        <div style="position:absolute;bottom:28px;left:5px;font-size:9px;color:#8f8;">ulaz</div>
+        <div style="position:absolute;bottom:36px;right:10px;font-size:14px;color:#666;">→</div>
+        <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);font-size:7px;color:#ffd700;white-space:nowrap;margin-top:-10px;">oltar</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Oko oltara</h3>
+      <p>Četiri Enta raspoređena oko centralnog oltara. Dramatično i simetrično.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:16px;">Boje su samo za prikaz rasporeda — u igri svi izgledaju isto (drveni) dok se ne aktiviraju.</p>

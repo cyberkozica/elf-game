@@ -1,0 +1,111 @@
+<h2>Što se dogodi kad odabereš krivojg Enta?</h2>
+<p class="subtitle">Pritisnete E na krivom Entu. Kako se otkriva da je kip?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#1a1a2e;width:100%;height:130px;position:relative;display:flex;align-items:center;justify-content:center;gap:30px;">
+        <!-- Before -->
+        <div style="text-align:center;">
+          <div style="font-size:9px;color:#888;margin-bottom:4px;">PRIJE</div>
+          <div style="width:24px;height:36px;background:#4a3728;margin:0 auto;border-radius:4px 4px 0 0;position:relative;">
+            <div style="position:absolute;top:6px;left:3px;width:5px;height:4px;background:#2d5a27;border-radius:50%;"></div>
+            <div style="position:absolute;top:6px;right:3px;width:5px;height:4px;background:#2d5a27;border-radius:50%;"></div>
+          </div>
+          <div style="font-size:8px;color:#5a8a5a;margin-top:2px;">drveni oči</div>
+        </div>
+        <div style="font-size:20px;color:#666;">→</div>
+        <!-- After: svi kipovi se otkriju -->
+        <div style="text-align:center;">
+          <div style="font-size:9px;color:#888;margin-bottom:4px;">POSLIJE</div>
+          <div style="display:flex;gap:6px;">
+            <div style="text-align:center;">
+              <div style="width:16px;height:24px;background:#b87333;border-radius:3px 3px 0 0;"></div>
+              <div style="font-size:7px;color:#b87333;">brončani</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:16px;height:24px;background:#aaa;border-radius:3px 3px 0 0;"></div>
+              <div style="font-size:7px;color:#aaa;">srebrni</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:16px;height:24px;background:#ffd700;border-radius:3px 3px 0 0;"></div>
+              <div style="font-size:7px;color:#ffd700;">zlatni</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Svi kipovi se otkriju odjednom</h3>
+      <p>Pritisneš E — sva tri kipa odjednom pokažu svoju boju. Vidiš koliko si propustio.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#1a1a2e;width:100%;height:130px;position:relative;display:flex;align-items:center;justify-content:center;gap:20px;">
+        <!-- Only activated one reveals -->
+        <div style="text-align:center;">
+          <div style="font-size:9px;color:#888;margin-bottom:4px;">ODABRANI</div>
+          <div style="width:24px;height:36px;background:#b87333;margin:0 auto;border-radius:4px 4px 0 0;position:relative;box-shadow:0 0 8px #b87333;">
+            <div style="position:absolute;top:6px;left:3px;width:5px;height:4px;background:#ff4444;border-radius:50%;"></div>
+            <div style="position:absolute;top:6px;right:3px;width:5px;height:4px;background:#ff4444;border-radius:50%;"></div>
+          </div>
+          <div style="font-size:8px;color:#b87333;margin-top:2px;">→ brončani!</div>
+        </div>
+        <div style="font-size:16px;color:#444;">vs</div>
+        <!-- Others stay hidden -->
+        <div style="text-align:center;">
+          <div style="font-size:9px;color:#888;margin-bottom:4px;">OSTALI</div>
+          <div style="display:flex;gap:6px;">
+            <div style="text-align:center;">
+              <div style="width:16px;height:24px;background:#4a3728;border-radius:3px 3px 0 0;opacity:0.6;"></div>
+              <div style="font-size:7px;color:#666;">?</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:16px;height:24px;background:#4a3728;border-radius:3px 3px 0 0;opacity:0.6;"></div>
+              <div style="font-size:7px;color:#666;">?</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:16px;height:24px;background:#4a3728;border-radius:3px 3px 0 0;opacity:0.6;"></div>
+              <div style="font-size:7px;color:#666;">?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Samo odabrani se otkrije</h3>
+      <p>Samo taj jedan postane brončani/srebrni/zlatni. Ostali ostaju tajanstveni. Odmah te vrati u ruševine.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#1a1a2e;width:100%;height:130px;position:relative;display:flex;align-items:center;justify-content:center;gap:20px;">
+        <!-- Dramatic: all freeze, shake, then all reveal -->
+        <div style="text-align:center;">
+          <div style="font-size:9px;color:#cc4444;margin-bottom:4px;letter-spacing:1px;">GRMLJAVINA...</div>
+          <div style="display:flex;gap:4px;align-items:flex-end;">
+            <div style="text-align:center;">
+              <div style="width:16px;height:24px;background:#b87333;border-radius:3px 3px 0 0;transform:rotate(-3deg);"></div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:20px;height:30px;background:#aaa;border-radius:3px 3px 0 0;transform:rotate(2deg);"></div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:16px;height:24px;background:#ffd700;border-radius:3px 3px 0 0;transform:rotate(-2deg);"></div>
+            </div>
+          </div>
+          <div style="font-size:7px;color:#cc4444;margin-top:4px;">svi se otkriju + poruka</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Dramatično: tresu se svi + poruka</h3>
+      <p>Kratka animacija — kipovi se zatresu, svi odjednom pokažu materijal, pojavi se kratka poruka poput "Ovo nije bio pravi Ent!"</p>
+    </div>
+  </div>
+
+</div>
