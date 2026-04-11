@@ -38,11 +38,16 @@ export default class SceneBase extends Phaser.Scene {
 
     // Touch controls (no-op on desktop)
     this.touch = new TouchControls(this);
+
+    // Boing stun — set to true during bounce, blocks player input
+    this._boingStunned = false;
   }
 
   // Call from each subclass in update()
   _baseUpdate(delta) {
-    this.player.update(this.touch);
+    if (!this._boingStunned) {
+      this.player.update(this.touch);
+    }
     this.lantern.update(delta);
     this.hud.update(this.lantern.getEnergy(), this.collectedRunes);
   }
@@ -74,8 +79,9 @@ export default class SceneBase extends Phaser.Scene {
     });
   }
 
-  // Floating BOING! + optional message — reusable across scenes
+  // Floating BOING! + optional message + physics bounce — reusable across scenes
   _showBoing(x, y, label = 'BOING!', msg = null) {
+    // Visual text
     const boing = this.add.text(x, y - 20, label, {
       fontSize: '14px', color: '#ffcc00', fontStyle: 'bold'
     }).setOrigin(0.5).setDepth(15);
@@ -91,6 +97,13 @@ export default class SceneBase extends Phaser.Scene {
         targets: t, alpha: 0, duration: 1500, onComplete: () => t.destroy()
       });
     }
+    // Physics bounce — push player away from (x, y)
+    const dx = this.player.x - x;
+    const dy = this.player.y - y;
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
+    this.player.sprite.setVelocity((dx / len) * 200, (dy / len) * 200);
+    this._boingStunned = true;
+    this.time.delayedCall(400, () => { this._boingStunned = false; });
   }
 
   // Call from subclass update() to check mushroom pickups

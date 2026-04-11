@@ -28,7 +28,7 @@ export default class EndScene extends Phaser.Scene {
     // Note: Phaser 3 cannot tween Text color — use delayedCall + setColor()
     const runeSymbols = ['ᚱ', 'ᚠ', 'ᛩ', 'ᛜ', 'ᚹ', 'ᛈ', 'ᚷ'];
     runeSymbols.forEach((sym, i) => {
-      const rt = this.add.text(135 + i * 30, 100, sym, {
+      const rt = this.add.text(150 + i * 30, 100, sym, {
         fontSize: '20px', fontFamily: 'serif', color: '#2a4a2a'
       }).setOrigin(0.5).setAlpha(0);
 
