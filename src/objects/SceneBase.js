@@ -93,7 +93,7 @@ export default class SceneBase extends Phaser.Scene {
   _createTrees(positions) {
     this.treesGroup = this.physics.add.staticGroup();
     positions.forEach(([x, y]) => {
-      const g = this.add.graphics();
+      const g = this.add.graphics().setDepth(3);
       g.fillStyle(0x0f2a0f);
       g.fillTriangle(x, y - 30, x - 18, y + 10, x + 18, y + 10);
       g.fillStyle(0x1a0f05);

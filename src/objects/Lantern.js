@@ -46,7 +46,7 @@ export default class Lantern {
     const y = this.player.y;
 
     this.overlay.clear();
-    this.overlay.fillStyle(0x020805, 0.92);
+    this.overlay.fillStyle(0x020805, 0.80);
     this.overlay.fillRect(0, 0, GAME_WIDTH, y - radius);
     this.overlay.fillRect(0, y + radius, GAME_WIDTH, GAME_HEIGHT - y - radius);
     this.overlay.fillRect(0, y - radius, x - radius, radius * 2);

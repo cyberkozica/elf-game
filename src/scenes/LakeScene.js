@@ -40,14 +40,14 @@ export default class LakeScene extends SceneBase {
     // ── Shores + island (depth 2) ──────────────────────────
     const shores = this.add.graphics().setDepth(2);
     // Left shore — full scene height
-    shores.fillStyle(0x5a4a2a);
+    shores.fillStyle(0x3a2e18);
     shores.fillRect(0, 0, 80, 320);
-    // Right shore — connects lava level and upper bridge level
-    shores.fillRect(400, 85, 80, 60);
+    // Right shore — full scene height
+    shores.fillRect(400, 0, 80, 320);
     // Center island
     shores.fillRect(220, 115, 80, 90);
     // Island edge detail
-    shores.fillStyle(0x4a3a1a);
+    shores.fillStyle(0x261e0f);
     shores.fillRect(220, 115, 80, 2);
     shores.fillRect(220, 203, 80, 2);
     shores.fillRect(220, 115, 2, 90);
