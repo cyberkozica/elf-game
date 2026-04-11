@@ -291,11 +291,16 @@ export default class LakeScene extends SceneBase {
     if (dist >= 60) return;
     if (!(Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) return;
 
-    // Wake the Ent on first interaction
+    // Wake the Ent on first interaction — check rune state immediately
     if (!this.ent.isAwake()) {
       this.ent.wake();
-      this.dialog.show('Drevno drvo', '"Prođi mostom koji vidiš u odrazu vode, ne u stvarnosti."');
-      this.time.delayedCall(3500, () => this.dialog.hide());
+      if (this.rune.isCollected()) {
+        this.dialog.show('Drevno drvo', '"Dobro. Špilja kristala čeka te na istoku. Pazi na redoslijed svjetla."');
+        this._entSpokenAfterRune = true;
+      } else {
+        this.dialog.show('Drevno drvo', '"Prođi mostom koji vidiš u odrazu vode, ne u stvarnosti."');
+        this.time.delayedCall(3500, () => this.dialog.hide());
+      }
       return;
     }
 
