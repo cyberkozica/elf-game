@@ -39,9 +39,9 @@ export default class LakeScene extends SceneBase {
 
     // ── Shores + island (depth 2) ──────────────────────────
     const shores = this.add.graphics().setDepth(2);
-    // Left shore — full height
+    // Left shore — full scene height
     shores.fillStyle(0x5a4a2a);
-    shores.fillRect(0, 70, 80, 160);
+    shores.fillRect(0, 0, 80, 320);
     // Right shore — connects lava level and upper bridge level
     shores.fillRect(400, 85, 80, 60);
     // Center island
@@ -117,6 +117,9 @@ export default class LakeScene extends SceneBase {
     // Right shore north wall (blocks gap y=69-85 at x>400)
     const rsN = this.barrierGroup.create(440, 78, null);
     rsN.setVisible(false).setSize(80, 14).refreshBody();
+    // Lava right-edge wall — prevents right shore player from drifting left into lava zone
+    const lavaWall = this.barrierGroup.create(402, 95, null);
+    lavaWall.setVisible(false).setSize(4, 20).refreshBody();
     this.physics.add.collider(this.player.sprite, this.barrierGroup);
 
     // ── Lava overlap zone ──────────────────────────────────
