@@ -19,6 +19,12 @@ export default class SceneBase extends Phaser.Scene {
     // Lantern
     this.lantern = new Lantern(this, this.player);
 
+    // Audio — singleton first so HUD can access it
+    if (!this.game.registry.has('audio')) {
+      this.game.registry.set('audio', new AudioManager());
+    }
+    this.audio = this.game.registry.get('audio');
+
     // HUD — collectedRunes passed in via scene.start() data
     this.collectedRunes = this.sys.settings.data?.runes ?? [];
     this.hud = new HUD(this);
@@ -43,11 +49,6 @@ export default class SceneBase extends Phaser.Scene {
     // Boing stun — set to true during bounce, blocks player input
     this._boingStunned = false;
 
-    // Audio — singleton shared across all scenes via game registry
-    if (!this.game.registry.has('audio')) {
-      this.game.registry.set('audio', new AudioManager());
-    }
-    this.audio = this.game.registry.get('audio');
   }
 
   // Call from each subclass in update()
