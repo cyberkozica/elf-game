@@ -98,6 +98,7 @@ export default class ForestScene extends Phaser.Scene {
 
     this._transitioning = false;
     this.touch = new TouchControls(this);
+    this.audio = this.game.registry.get('audio');
   }
 
   _createTrees() {
@@ -161,6 +162,7 @@ export default class ForestScene extends Phaser.Scene {
         this.rune.collect();
         this.collectedRunes.push('ᚱ');
         this.audio?.rune();
+
         this.dialog.show('', '✦ Pronašao si runu ᚱ!');
         this.time.delayedCall(2000, () => this.dialog.hide());
       }
@@ -174,6 +176,7 @@ export default class ForestScene extends Phaser.Scene {
         this.lantern.refill();
         src.used = true;
         src.graphics.setAlpha(0.2);
+        this.audio?.mushroom();
         this.dialog.show('', '✦ Svjetiljka se napunila!');
         this.time.delayedCall(1500, () => this.dialog.hide());
       }

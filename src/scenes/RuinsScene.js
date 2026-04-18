@@ -155,6 +155,7 @@ export default class RuinsScene extends SceneBase {
         } else if (this.puzzle.sequence.length > wasLength) {
           // Correct — green
           pillar.label.setColor('#44cc44');
+          this.audio?.correctStep();
         }
 
         if (this.puzzle.solved) {
