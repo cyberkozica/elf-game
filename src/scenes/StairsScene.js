@@ -44,6 +44,12 @@ export default class StairsScene extends SceneBase {
       this._buildStaircase(330, 180),
     ];
 
+    // Subtle hint — faint ᛜ above the correct staircase, blends with stone floor
+    const hintX = this.stairs[this._correct].cx;
+    this.add.text(hintX, 100, 'ᛜ', {
+      fontSize: '10px', fontFamily: 'serif', color: '#cc6600'
+    }).setOrigin(0.5).setDepth(3).setAlpha(0.28);
+
     // Prompt label — appears when player is close
     this.promptLeft  = this._buildPrompt(150, 220);
     this.promptRight = this._buildPrompt(330, 220);
