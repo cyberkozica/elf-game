@@ -20,10 +20,16 @@ export default class SceneBase extends Phaser.Scene {
     this.lantern = new Lantern(this, this.player);
 
     // Audio — singleton first so HUD can access it
-    if (!this.game.registry.has('audio')) {
-      this.game.registry.set('audio', new AudioManager());
+    try {
+      if (!this.game.registry.has('audio')) {
+        this.game.registry.set('audio', new AudioManager());
+      }
+      this.audio = this.game.registry.get('audio');
+    } catch (_) {}
+    // Fallback no-op so audio calls never crash the game
+    if (!this.audio) {
+      this.audio = { rune(){}, boing(){}, mushroom(){}, correctStep(){}, entWake(){}, portal(){}, toggleMute(){ return false; }, muted: false };
     }
-    this.audio = this.game.registry.get('audio');
 
     // HUD — collectedRunes passed in via scene.start() data
     this.collectedRunes = this.sys.settings.data?.runes ?? [];
@@ -105,7 +111,7 @@ export default class SceneBase extends Phaser.Scene {
         targets: t, alpha: 0, duration: 1500, onComplete: () => t.destroy()
       });
     }
-    this.audio.boing();
+    this.audio?.boing();
     // Physics bounce — push player away from (x, y)
     const dx = this.player.x - x;
     const dy = this.player.y - y;
@@ -124,7 +130,7 @@ export default class SceneBase extends Phaser.Scene {
         this.lantern.refill();
         src.used = true;
         src.graphics.setAlpha(0.2);
-        this.audio.mushroom();
+        this.audio?.mushroom();
         this.dialog.show('', '✦ Svjetiljka se napunila!');
         this.time.delayedCall(1500, () => this.dialog.hide());
       }

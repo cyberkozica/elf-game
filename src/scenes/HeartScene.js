@@ -78,7 +78,7 @@ export default class HeartScene extends SceneBase {
     // Ent wakes when light first touches it — but rune stays hidden until E is pressed
     if (inLight && !this.ent.isAwake()) {
       this.ent.wake();
-      this.audio.entWake();
+      this.audio?.entWake();
       this.dialog.show('Drevno drvo',
         '"Ti si stigao... Osjećam svjetlo tvoje svjetiljke. Moja sjemenka — runa ᚷ — tvoja je. Priđi bliže."');
       this.time.delayedCall(3500, () => this.dialog.hide());
@@ -115,7 +115,7 @@ export default class HeartScene extends SceneBase {
     if (inLight && d < 24) {
       this.lastRune.collect();
       this.collectedRunes.push('ᚷ');
-      this.audio.rune();
+      this.audio?.rune();
       this.dialog.show('', '✦ Pronašao si posljednju runu ᚷ!');
       this.time.delayedCall(2000, () => this.dialog.hide());
     }
@@ -156,7 +156,7 @@ export default class HeartScene extends SceneBase {
 
   _activatePortal() {
     this.portalActivated = true;
-    this.audio.portal();
+    this.audio?.portal();
 
     this.portal.fillStyle(0x3aaa3a, 0.3);
     this.portal.fillCircle(240, 160, 30);

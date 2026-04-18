@@ -168,7 +168,7 @@ export default class RuinsScene extends SceneBase {
     this.doorOpen = true;
     this.door.clear();
     this.ent.wake();
-    this.audio.entWake();
+    this.audio?.entWake();
     this.dialog.show('Drevno drvo', '"Dobro... pamtiš stare runske zakone. Uzmi runu i idi dalje."');
     this.time.delayedCall(3000, () => {
       this.dialog.hide();
@@ -185,7 +185,7 @@ export default class RuinsScene extends SceneBase {
     if (inLight && d < 24) {
       this.rune.collect();
       this.collectedRunes.push('ᚹ');
-      this.audio.rune();
+      this.audio?.rune();
       this.dialog.show('', '✦ Pronašao si runu ᚹ!');
       this.time.delayedCall(2000, () => this.dialog.hide());
     }

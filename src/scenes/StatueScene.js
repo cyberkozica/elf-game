@@ -193,7 +193,7 @@ export default class StatueScene extends SceneBase {
     if (inLight && d < 24) {
       this.rune.collect();
       this.collectedRunes.push('ᛈ');
-      this.audio.rune();
+      this.audio?.rune();
       this.dialog.show('', '✦ Pronašao si runu ᛈ!');
       this.time.delayedCall(2000, () => this.dialog.hide());
     }
