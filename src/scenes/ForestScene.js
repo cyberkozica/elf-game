@@ -136,6 +136,7 @@ export default class ForestScene extends Phaser.Scene {
     if (dist < 60 && (Phaser.Input.Keyboard.JustDown(this.keyE) || this.touch.actionJustDown())) {
       if (!this.ent.isAwake()) {
         this.ent.wake();
+        this.audio.entWake();
         this.dialog.show('Drevno drvo',
           '"Ah... svjetlo... dugo nisam osjetio toplinu. Pronađi runski kamen, mladi vilenjače."');
       } else if (!this.dialog.visible) {
@@ -159,6 +160,7 @@ export default class ForestScene extends Phaser.Scene {
       if (inLight && distToRune < 24) {
         this.rune.collect();
         this.collectedRunes.push('ᚱ');
+        this.audio.rune();
         this.dialog.show('', '✦ Pronašao si runu ᚱ!');
         this.time.delayedCall(2000, () => this.dialog.hide());
       }

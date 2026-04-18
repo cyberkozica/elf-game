@@ -277,6 +277,7 @@ export default class LakeScene extends SceneBase {
     if (inLight && d < 24) {
       this.rune.collect();
       this.collectedRunes.push('ᚠ');
+      this.audio.rune();
       this.dialog.show('', '✦ Pronašao si runu ᚠ!');
       this.time.delayedCall(2000, () => this.dialog.hide());
     }
@@ -294,6 +295,7 @@ export default class LakeScene extends SceneBase {
     // Wake the Ent on first interaction — check rune state immediately
     if (!this.ent.isAwake()) {
       this.ent.wake();
+      this.audio.entWake();
       if (this.rune.isCollected()) {
         this.dialog.show('Drevno drvo', '"Dobro. Špilja kristala čeka te na istoku. Pazi na redoslijed svjetla."');
         this._entSpokenAfterRune = true;

@@ -237,6 +237,7 @@ export default class CaveScene extends SceneBase {
           if (this.crystalProgress === 5) {
             this._allCrystalsActivated();
           } else {
+            this.audio.correctStep();
             this.dialog.show('', `✦ Kristal ${idx + 1} aktiviran. (${this.crystalProgress}/5)`);
             this.time.delayedCall(1500, () => this.dialog.hide());
           }
@@ -263,6 +264,8 @@ export default class CaveScene extends SceneBase {
   _allCrystalsActivated() {
     this.crystalSolved = true;
     this.ent.wake();
+    this.audio.entWake();
+    this.audio.rune();
     this.dialog.show('Drevno drvo', '"Kamenje pamti... Runa ᛩ je tvoja. Putuj prema istoku — čekaju te začarane stube."');
     this.time.delayedCall(3500, () => {
       this.dialog.hide();

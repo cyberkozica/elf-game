@@ -4,6 +4,7 @@ import Lantern from './Lantern.js';
 import HUD from '../ui/HUD.js';
 import DialogBox from '../ui/DialogBox.js';
 import TouchControls from '../ui/TouchControls.js';
+import AudioManager from './AudioManager.js';
 
 export default class SceneBase extends Phaser.Scene {
   // Call from each subclass in create()
@@ -41,6 +42,12 @@ export default class SceneBase extends Phaser.Scene {
 
     // Boing stun — set to true during bounce, blocks player input
     this._boingStunned = false;
+
+    // Audio — singleton shared across all scenes via game registry
+    if (!this.game.registry.has('audio')) {
+      this.game.registry.set('audio', new AudioManager());
+    }
+    this.audio = this.game.registry.get('audio');
   }
 
   // Call from each subclass in update()
@@ -97,6 +104,7 @@ export default class SceneBase extends Phaser.Scene {
         targets: t, alpha: 0, duration: 1500, onComplete: () => t.destroy()
       });
     }
+    this.audio.boing();
     // Physics bounce — push player away from (x, y)
     const dx = this.player.x - x;
     const dy = this.player.y - y;
@@ -115,6 +123,7 @@ export default class SceneBase extends Phaser.Scene {
         this.lantern.refill();
         src.used = true;
         src.graphics.setAlpha(0.2);
+        this.audio.mushroom();
         this.dialog.show('', '✦ Svjetiljka se napunila!');
         this.time.delayedCall(1500, () => this.dialog.hide());
       }

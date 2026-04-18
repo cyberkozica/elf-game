@@ -147,6 +147,7 @@ export default class StairsScene extends SceneBase {
         if (idx === this._correct) {
           this.collectedRunes.push('ᛜ');
           this.rune.collect();
+          this.audio.rune();
           this.dialog.show('', '✦ Prave stube! Pronašao si runu ᛜ. Idi prema istoku.');
           this.time.delayedCall(2500, () => this.dialog.hide());
         } else {
