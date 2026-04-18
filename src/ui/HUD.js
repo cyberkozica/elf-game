@@ -2,6 +2,7 @@
 export default class HUD {
   constructor(scene) {
     this.scene = scene;
+    this._audio = scene.game.registry.get('audio');
 
     // Kontejner na vrhu
     this.container = scene.add.container(0, 0).setDepth(20);
@@ -33,6 +34,16 @@ export default class HUD {
     // Traka energije — punjenje
     this.energyBar = scene.add.graphics();
     this.container.add(this.energyBar);
+
+    // Gumb za zvuk — gornji desni kut
+    this.muteBtn = scene.add.text(468, 8, '♪', {
+      fontSize: '12px', color: '#5a6a5a'
+    }).setOrigin(1, 0).setInteractive({ useHandCursor: true });
+    this.muteBtn.on('pointerdown', () => {
+      const muted = this._audio.toggleMute();
+      this.muteBtn.setAlpha(muted ? 0.3 : 1.0);
+    });
+    this.container.add(this.muteBtn);
 
     // Rune slotovi (7 runa: ᚱ ᚠ ᛩ ᛜ ᚹ ᛈ ᚷ)
     this.runeTexts = [];
