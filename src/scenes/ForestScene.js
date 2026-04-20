@@ -6,6 +6,7 @@ import Ent from '../objects/Ent.js';
 import DialogBox from '../ui/DialogBox.js';
 import Rune from '../objects/Rune.js';
 import TouchControls from '../ui/TouchControls.js';
+import AudioManager from '../objects/AudioManager.js';
 
 export default class ForestScene extends Phaser.Scene {
   constructor() { super('Forest'); }
@@ -98,6 +99,9 @@ export default class ForestScene extends Phaser.Scene {
 
     this._transitioning = false;
     this.touch = new TouchControls(this);
+    if (!this.game.registry.has('audio')) {
+      this.game.registry.set('audio', new AudioManager());
+    }
     this.audio = this.game.registry.get('audio');
   }
 

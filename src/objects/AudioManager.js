@@ -47,6 +47,7 @@ export default class AudioManager {
   get muted() { return this._muted; }
   toggleMute() { this._muted = !this._muted; return this._muted; }
 
+  note(freq)    { if (!this._muted) beep(freq, 0.40, 0.18, 'sine'); }
   rune()        { if (!this._muted) [523,659,784,1047].forEach((f,i) => setTimeout(() => beep(f, 0.22, 0.18), i*130)); }
   boing()       { if (!this._muted) beep(360, 0.45, 0.28, 'sine', 70); }
   mushroom()    { if (!this._muted) beep(440, 0.30, 0.20, 'sine', 660); }

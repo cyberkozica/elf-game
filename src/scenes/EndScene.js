@@ -1,10 +1,18 @@
 // src/scenes/EndScene.js — puna animirana verzija
+import AudioManager from '../objects/AudioManager.js';
+
 export default class EndScene extends Phaser.Scene {
   constructor() { super('End'); }
 
   create() {
     // Dark background with subtle green tint
     this.add.rectangle(240, 160, 480, 320, 0x020a02);
+
+    // Audio
+    if (!this.game.registry.has('audio')) {
+      this.game.registry.set('audio', new AudioManager());
+    }
+    const audio = this.game.registry.get('audio');
 
     // Animated stars — tween only alpha (valid Phaser 3 Text tween)
     for (let i = 0; i < 30; i++) {
@@ -24,25 +32,23 @@ export default class EndScene extends Phaser.Scene {
       });
     }
 
-    // Runes appear one by one, then turn gold
-    // Note: Phaser 3 cannot tween Text color — use delayedCall + setColor()
+    // Runes appear one by one with rising C major notes
+    // C4 D4 E4 F4 G4 A4 B4
+    const runeNotes = [261, 293, 329, 349, 392, 440, 493];
     const runeSymbols = ['ᚱ', 'ᚠ', 'ᛩ', 'ᛜ', 'ᚹ', 'ᛈ', 'ᚷ'];
     runeSymbols.forEach((sym, i) => {
       const rt = this.add.text(150 + i * 30, 100, sym, {
         fontSize: '20px', fontFamily: 'serif', color: '#2a4a2a'
       }).setOrigin(0.5).setAlpha(0);
 
-      // Fade in
-      this.tweens.add({
-        targets: rt,
-        alpha: 1,
-        duration: 600,
-        delay: 500 + i * 400
-      });
-      // Change color to gold after fade completes
-      this.time.delayedCall(500 + i * 400 + 600, () => {
-        rt.setColor('#c8c840');
-      });
+      const delay = 500 + i * 400;
+
+      // Fade in + note
+      this.tweens.add({ targets: rt, alpha: 1, duration: 600, delay });
+      this.time.delayedCall(delay, () => audio?.note(runeNotes[i]));
+
+      // Turn gold after fade
+      this.time.delayedCall(delay + 600, () => rt.setColor('#c8c840'));
     });
 
     // Main message
