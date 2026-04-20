@@ -4,17 +4,25 @@ import AudioManager from '../objects/AudioManager.js';
 export default class EndScene extends Phaser.Scene {
   constructor() { super('End'); }
 
+  preload() {
+    this.load.audio('theme', 'assets/audio/Tiled_Canopy.mp3');
+  }
+
   create() {
     // Dark background with subtle green tint
     this.add.rectangle(240, 160, 480, 320, 0x020a02);
 
-    // Audio
+    // Audio (synthesised SFX)
     if (!this.game.registry.has('audio')) {
       this.game.registry.set('audio', new AudioManager());
     }
     const audio = this.game.registry.get('audio');
 
-    // Animated stars — tween only alpha (valid Phaser 3 Text tween)
+    // Background music — quiet, looping
+    this.music = this.sound.add('theme', { loop: true, volume: 0.25 });
+    this.music.play();
+
+    // Animated stars
     for (let i = 0; i < 30; i++) {
       const sx = Phaser.Math.Between(20, 460);
       const sy = Phaser.Math.Between(20, 280);
@@ -34,7 +42,7 @@ export default class EndScene extends Phaser.Scene {
 
     // Runes appear one by one with rising C major notes
     // C4 D4 E4 F4 G4 A4 B4
-    const runeNotes = [261, 293, 329, 349, 392, 440, 493];
+    const runeNotes   = [261, 293, 329, 349, 392, 440, 493];
     const runeSymbols = ['ᚱ', 'ᚠ', 'ᛩ', 'ᛜ', 'ᚹ', 'ᛈ', 'ᚷ'];
     runeSymbols.forEach((sym, i) => {
       const rt = this.add.text(150 + i * 30, 100, sym, {
@@ -42,12 +50,8 @@ export default class EndScene extends Phaser.Scene {
       }).setOrigin(0.5).setAlpha(0);
 
       const delay = 500 + i * 400;
-
-      // Fade in + note
       this.tweens.add({ targets: rt, alpha: 1, duration: 600, delay });
       this.time.delayedCall(delay, () => audio?.note(runeNotes[i]));
-
-      // Turn gold after fade
       this.time.delayedCall(delay + 600, () => rt.setColor('#c8c840'));
     });
 
@@ -70,7 +74,10 @@ export default class EndScene extends Phaser.Scene {
     this.tweens.add({ targets: btn, alpha: 1, duration: 600, delay: 4200 });
 
     btn.on('pointerover', () => btn.setColor('#aaeaaa'));
-    btn.on('pointerout', () => btn.setColor('#3a7a3a'));
-    btn.on('pointerdown', () => this.scene.start('Menu'));
+    btn.on('pointerout',  () => btn.setColor('#3a7a3a'));
+    btn.on('pointerdown', () => {
+      this.music.stop();
+      this.scene.start('Menu');
+    });
   }
 }
